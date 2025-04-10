@@ -1,3 +1,7 @@
+/**
+ * Owner: Dongjin Kuk
+ */
+
 using Unity.Netcode;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
