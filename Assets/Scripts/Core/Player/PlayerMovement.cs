@@ -45,8 +45,9 @@ namespace MSE.Core
 
         private void FixedUpdate()
         {
-            Vector3 movePos = new Vector3(m_Direction.x, 0f, m_Direction.y) * m_MoveSpeed;
-            m_CharacterController.Move(movePos * Time.fixedDeltaTime);
+            Vector3 movePos = new Vector3(m_Direction.x, 0f, m_Direction.y);
+            Vector3 moveLocalPos = transform.TransformDirection(movePos) * m_MoveSpeed;
+            m_CharacterController.Move(moveLocalPos * Time.fixedDeltaTime);
         }
 
         public void OnMove(InputAction.CallbackContext context)

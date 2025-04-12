@@ -3,9 +3,10 @@
  */
 
 using System.Collections;
-using System.Diagnostics;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace MSE.Core
 {
@@ -15,6 +16,8 @@ namespace MSE.Core
         private CanvasGroup m_SplashGroup;
         [SerializeField]
         private CanvasGroup m_IntroGroup;
+        [SerializeField]
+        private CanvasGroup m_LoginGroup;
 
         private void Awake()
         {
@@ -64,6 +67,15 @@ namespace MSE.Core
 
             m_SplashGroup.alpha = 0f;
             m_SplashGroup.gameObject.SetActive(false);
+        }
+
+        public async void OnStartTouched()
+        {
+            Debug.Log("InitializeAsync...");
+
+            await UnityServices.InitializeAsync();
+        
+            m_LoginGroup.gameObject.SetActive(true);
         }
     }
 }
