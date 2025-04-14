@@ -14,6 +14,7 @@ namespace MSE.Core
         private CharacterController m_CharacterController;
 
         [SerializeField] private float m_MoveSpeed = 5f;
+        [SerializeField] private float m_JumpHeight = 3f;
         [SerializeField] private float m_MouseSensitivity = 100f;
         private Vector2 m_Direction;
         private Vector2 m_MouseDelta;
@@ -24,6 +25,9 @@ namespace MSE.Core
         [SerializeField]
         private Transform m_RotTransform;
 
+        private Vector3 m_Velocity = Vector3.zero;
+        private bool m_JumpPressed = false;
+
         private void Awake()
         {
             m_CharacterController = GetComponent<CharacterController>();
@@ -31,6 +35,8 @@ namespace MSE.Core
 
         private void Update()
         {
+            if (!IsOwner) return;
+
             float mouseX = m_MouseDelta.x * m_MouseSensitivity * Time.deltaTime;
             float mouseY = m_MouseDelta.y * m_MouseSensitivity * Time.deltaTime;
 
@@ -41,13 +47,34 @@ namespace MSE.Core
 
             m_RotTransform.localRotation = Quaternion.Euler(m_XRotation, 0f, 0f);
             transform.Rotate(Vector3.up * mouseX);
+
+            Debug.Log($"IsGrounded: {m_CharacterController.isGrounded}");
         }
 
         private void FixedUpdate()
         {
-            Vector3 movePos = new Vector3(m_Direction.x, 0f, m_Direction.y);
-            Vector3 moveLocalPos = transform.TransformDirection(movePos) * m_MoveSpeed;
-            m_CharacterController.Move(moveLocalPos * Time.fixedDeltaTime);
+            if (!IsOwner) return;
+
+            if (m_CharacterController.isGrounded && m_Velocity.y < 0)
+            {
+                m_Velocity.y = 0f;
+            }
+
+            Vector3 moveDir = transform.right * m_Direction.x + transform.forward * m_Direction.y;
+            moveDir.Normalize();
+
+            Vector3 horiVel = moveDir * m_MoveSpeed;
+            m_Velocity.x = horiVel.x;
+            m_Velocity.z = horiVel.z;
+
+            if (m_JumpPressed && m_CharacterController.isGrounded)
+            {
+                m_JumpPressed = false;
+                Jump();
+            }
+            ApplyGravity();
+
+            m_CharacterController.Move(m_Velocity * Time.fixedDeltaTime);
         }
 
         public void OnMove(InputAction.CallbackContext context)
@@ -62,12 +89,32 @@ namespace MSE.Core
             }
         }
 
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            if (!IsOwner) return;
+            if (m_CharacterController.isGrounded) return;
+
+            if (context.started || context.performed)
+            {
+                m_JumpPressed = true;
+            }
+        }
+
         public void OnRotation(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
 
             m_MouseDelta = context.ReadValue<Vector2>();
         }
-    }
 
+        private void ApplyGravity()
+        {
+            m_Velocity.y += -9.81f * Time.fixedDeltaTime;
+        }
+
+        private void Jump()
+        {
+            m_Velocity.y += Mathf.Sqrt(m_JumpHeight * -2.0f * -9.81f);
+        }
+    }
 }

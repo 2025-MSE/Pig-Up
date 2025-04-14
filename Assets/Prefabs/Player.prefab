@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 5648172875149218405}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94,6 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   m_MoveSpeed: 5
+  m_JumpHeight: 3
   m_MouseSensitivity: 50
   m_RotTransform: {fileID: 5627122843640327849}
 --- !u!114 &7541754478574010235
@@ -143,7 +144,7 @@ CharacterController:
   serializedVersion: 3
   m_Height: 2
   m_Radius: 0.5
-  m_SlopeLimit: 45
+  m_SlopeLimit: 60
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0
@@ -257,6 +258,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 266ceedf-1cf8-4fa8-8bfb-11faa7d7319c
     m_ActionName: 'Player/Build[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5574986949116567281}
+        m_TargetAssemblyTypeName: MSE.Core.PlayerMovement, Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e1201238-cc52-4f88-944d-b4b675fc061d
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
