@@ -12,13 +12,14 @@ GameObject:
   - component: {fileID: 3738313018623865555}
   - component: {fileID: 6224524371229430184}
   - component: {fileID: 5574986949116567281}
+  - component: {fileID: 7541754478574010235}
   - component: {fileID: 5822940356705099194}
   - component: {fileID: 4252404439808907075}
   - component: {fileID: 6639205055187015986}
   - component: {fileID: 5648172875149218405}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,8 +94,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   m_MoveSpeed: 5
-  m_MouseSensitivity: 100
+  m_JumpHeight: 3
+  m_MouseSensitivity: 50
   m_RotTransform: {fileID: 5627122843640327849}
+--- !u!114 &7541754478574010235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4797947549276881268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e23af3a9f10e88047887bb3eee4e791b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  m_BlockPrefab: {fileID: 292529717675648400, guid: 2a9a15de0fdf25d459e200a5ed1d2671, type: 3}
 --- !u!114 &5822940356705099194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,10 +144,10 @@ CharacterController:
   serializedVersion: 3
   m_Height: 2
   m_Radius: 0.5
-  m_SlopeLimit: 45
+  m_SlopeLimit: 60
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &6639205055187015986
 MonoBehaviour:
@@ -226,6 +242,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: bd93797f-499b-4154-a426-269f71aeedd5
     m_ActionName: 'Player/Rotation[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7541754478574010235}
+        m_TargetAssemblyTypeName: MSE.Core.PlayerBuilding, Assembly-CSharp
+        m_MethodName: OnBuild
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 266ceedf-1cf8-4fa8-8bfb-11faa7d7319c
+    m_ActionName: 'Player/Build[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5574986949116567281}
+        m_TargetAssemblyTypeName: MSE.Core.PlayerMovement, Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e1201238-cc52-4f88-944d-b4b675fc061d
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -355,7 +403,7 @@ GameObject:
   - component: {fileID: 4969413698146416150}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
