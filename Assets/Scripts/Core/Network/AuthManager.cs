@@ -43,15 +43,15 @@ namespace MSE.Core
             Task updatePlayerNameTask = AuthenticationService.Instance.UpdatePlayerNameAsync(username);
             yield return new WaitUntil(() => updatePlayerNameTask.IsCompleted);
 
-            using (UnityWebRequest request = new UnityWebRequest($"{ServerRef.BASE_URL}/api/users/signup", "POST"))
-            {
-                byte[] jsonBytes = Encoding.UTF8.GetBytes(dataJson);
-                request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-                request.downloadHandler = new DownloadHandlerBuffer();
-                request.SetRequestHeader("Content-Type", "application/json");
+            //using (UnityWebRequest request = new UnityWebRequest($"{ServerRef.BASE_URL}/api/users/signup", "POST"))
+            //{
+            //    byte[] jsonBytes = Encoding.UTF8.GetBytes(dataJson);
+            //    request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            //    request.downloadHandler = new DownloadHandlerBuffer();
+            //    request.SetRequestHeader("Content-Type", "application/json");
 
-                yield return request.SendWebRequest();
-            }
+            //    yield return request.SendWebRequest();
+            //}
         }
 
         public IEnumerator LoginCoroutine(string username, string password)
@@ -75,17 +75,17 @@ namespace MSE.Core
             Task updatePlayerNameTask = AuthenticationService.Instance.UpdatePlayerNameAsync(username);
             yield return new WaitUntil(() => updatePlayerNameTask.IsCompleted);
 
-            using (UnityWebRequest request = new UnityWebRequest($"{ServerRef.BASE_URL}/apis/users/login", "POST"))
-            {
-                byte[] jsonBytes = Encoding.UTF8.GetBytes(dataJson);
-                request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-                request.downloadHandler = new DownloadHandlerBuffer();
-                request.SetRequestHeader("Content-Type", "application/json");
+            //using (UnityWebRequest request = new UnityWebRequest($"{ServerRef.BASE_URL}/apis/users/login", "POST"))
+            //{
+            //    byte[] jsonBytes = Encoding.UTF8.GetBytes(dataJson);
+            //    request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            //    request.downloadHandler = new DownloadHandlerBuffer();
+            //    request.SetRequestHeader("Content-Type", "application/json");
 
-                yield return request.SendWebRequest();
+            //    yield return request.SendWebRequest();
 
-                Debug.Log(request.downloadHandler.text);
-            }
+            //    Debug.Log(request.downloadHandler.text);
+            //}
         }
     }
 }
