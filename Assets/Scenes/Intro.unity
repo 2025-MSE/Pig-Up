@@ -423,10 +423,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8781061954483598796}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -183}
-  m_SizeDelta: {x: -1120, y: -830.8}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &34947477
 MonoBehaviour:
@@ -491,7 +491,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -846,9 +846,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 701219733}
-        m_TargetAssemblyTypeName: MSE.Core.UILoginGroup, Assembly-CSharp
-        m_MethodName: OnSignUpPressed
+      - m_Target: {fileID: 701219736}
+        m_TargetAssemblyTypeName: MSE.Core.UISignupGroup, Assembly-CSharp
+        m_MethodName: OnSignupPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2134,7 +2134,8 @@ GameObject:
   m_Component:
   - component: {fileID: 701219732}
   - component: {fileID: 701219734}
-  - component: {fileID: 701219733}
+  - component: {fileID: 701219736}
+  - component: {fileID: 701219735}
   m_Layer: 5
   m_Name: UISignupGroup
   m_TagString: Untagged
@@ -2163,20 +2164,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &701219733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 701219731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74537e9decad8d1439303df3e8db8344, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UsernameField: {fileID: 2080231659}
-  m_PwdField: {fileID: 627936431}
 --- !u!225 &701219734
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2189,6 +2176,108 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &701219735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 701219731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e1201238-cc52-4f88-944d-b4b675fc061d
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3b9da908-8531-439e-9440-69b62f82f333
+    m_ActionName: 'Player/Crouch[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bd93797f-499b-4154-a426-269f71aeedd5
+    m_ActionName: 'Player/Rotation[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 266ceedf-1cf8-4fa8-8bfb-11faa7d7319c
+    m_ActionName: 'Player/Build[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0876daf4-efac-4af6-8d0d-1256c760a722
+    m_ActionName: 'Player/BlockRotation[/Mouse/scroll/y]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 701219736}
+        m_TargetAssemblyTypeName: MSE.Core.UISignupGroup, Assembly-CSharp
+        m_MethodName: OnTab
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 85745890-99cb-4865-950e-aa59c72abecf
+    m_ActionName: 'UI/Tab[/Keyboard/tab]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 701219736}
+        m_TargetAssemblyTypeName: MSE.Core.UISignupGroup, Assembly-CSharp
+        m_MethodName: OnEnter
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 66ad2d9b-9cd2-421f-be2d-0bb79f188054
+    m_ActionName: 'UI/Enter[/Keyboard/enter]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Keyboard&Mouse
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &701219736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 701219731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2d99cfc909d7423e92b4b4c0ec0460d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LoginGroup: {fileID: 5304924984929024762}
+  m_UsernameField: {fileID: 2080231659}
+  m_PwdField: {fileID: 627936431}
+  m_PlayerNameField: {fileID: 1007684738}
 --- !u!1 &789789497
 GameObject:
   m_ObjectHideFlags: 0
@@ -2274,7 +2363,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5304924984929024763}
         m_TargetAssemblyTypeName: MSE.Core.UILoginGroup, Assembly-CSharp
-        m_MethodName: OnSignUpPressed
+        m_MethodName: OnSignupPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4325,7 +4414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -5175,6 +5264,7 @@ GameObject:
   - component: {fileID: 1485637771233537494}
   - component: {fileID: 5304924984929024762}
   - component: {fileID: 5304924984929024763}
+  - component: {fileID: 5304924984929024764}
   m_Layer: 5
   m_Name: UILoginGroup
   m_TagString: Untagged
@@ -5206,8 +5296,95 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74537e9decad8d1439303df3e8db8344, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SignupGroup: {fileID: 701219734}
   m_UsernameField: {fileID: 1313710910}
   m_PwdField: {fileID: 1399193252}
+--- !u!114 &5304924984929024764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5304924984929024761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e1201238-cc52-4f88-944d-b4b675fc061d
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3b9da908-8531-439e-9440-69b62f82f333
+    m_ActionName: 'Player/Crouch[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bd93797f-499b-4154-a426-269f71aeedd5
+    m_ActionName: 'Player/Rotation[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 266ceedf-1cf8-4fa8-8bfb-11faa7d7319c
+    m_ActionName: 'Player/Build[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0876daf4-efac-4af6-8d0d-1256c760a722
+    m_ActionName: 'Player/BlockRotation[/Mouse/scroll/y]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5304924984929024763}
+        m_TargetAssemblyTypeName: MSE.Core.UILoginGroup, Assembly-CSharp
+        m_MethodName: OnTab
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 85745890-99cb-4865-950e-aa59c72abecf
+    m_ActionName: 'UI/Tab[/Keyboard/tab]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5304924984929024763}
+        m_TargetAssemblyTypeName: MSE.Core.UILoginGroup, Assembly-CSharp
+        m_MethodName: OnEnter
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 66ad2d9b-9cd2-421f-be2d-0bb79f188054
+    m_ActionName: 'UI/Enter[/Keyboard/enter]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Keyboard&Mouse
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!114 &6320145910104781925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5287,7 +5464,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -400, y: -200}
+  m_SizeDelta: {x: -1000, y: -400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

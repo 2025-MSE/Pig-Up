@@ -8,38 +8,43 @@ using UnityEngine.UI;
 
 namespace MSE.Core
 {
-    public class UILoginGroup : MonoBehaviour
+    public class UISignupGroup : MonoBehaviour
     {
         [SerializeField]
-        private CanvasGroup m_SignupGroup;
+        private CanvasGroup m_LoginGroup;
 
         [SerializeField] private TMP_InputField m_UsernameField;
         [SerializeField] private TMP_InputField m_PwdField;
+        [SerializeField] private TMP_InputField m_PlayerNameField;
 
-        private bool m_Loginning = false;
+        private bool m_Signupping = false;
 
-        public void OnLoginPressed()
+        void OnEnable()
         {
-            StartCoroutine(Login());
+            m_UsernameField.text = string.Empty;
+            m_PwdField.text = string.Empty;
+            m_PlayerNameField.text = string.Empty;
+
+            m_Signupping = false;
         }
 
         public void OnSignupPressed()
         {
-            gameObject.SetActive(false);
-            m_SignupGroup.gameObject.SetActive(true);
+            StartCoroutine(Signup());
         }
 
-        public IEnumerator Login()
+        public IEnumerator Signup()
         {
-            if (m_Loginning) yield break;
+            if (m_Signupping) yield break;
 
-            m_Loginning = true;
+            m_Signupping = true;
 
             string username = m_UsernameField.text;
             string password = m_PwdField.text;
-            
+            string playername = m_PlayerNameField.text;
+
             bool succeeded = false;
-            yield return StartCoroutine(AuthManager.Instance.LoginCoroutine(username, password, (success) => {
+            yield return StartCoroutine(AuthManager.Instance.SignUpCoroutine(username, password, playername, (success) => {
                 succeeded = success;
             }));
 
@@ -49,12 +54,12 @@ namespace MSE.Core
             }
             else
             {
-                Debug.Log("Login Error");
+                Debug.Log("Signup error");
             }
 
-            m_Loginning = false;
+            m_Signupping = false;
         }
-
+        
         public void OnTab(InputAction.CallbackContext context)
         {
             if (context.started)
@@ -77,7 +82,7 @@ namespace MSE.Core
         {
             if (context.started)
             {
-                StartCoroutine(Login());
+                StartCoroutine(Signup());
             }
         }
     }
