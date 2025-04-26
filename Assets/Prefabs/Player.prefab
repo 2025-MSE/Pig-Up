@@ -830,6 +830,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 3b9da908-8531-439e-9440-69b62f82f333
     m_ActionName: 'Player/Crouch[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 85745890-99cb-4865-950e-aa59c72abecf
+    m_ActionName: 'UI/Tab[/Keyboard/tab]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 66ad2d9b-9cd2-421f-be2d-0bb79f188054
+    m_ActionName: 'UI/Enter[/Keyboard/enter]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -1055,7 +1063,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0

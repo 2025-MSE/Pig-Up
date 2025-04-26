@@ -1201,6 +1201,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIRoomGroup
       objectReference: {fileID: 0}
+    - target: {fileID: 1572558123753686320, guid: a23acf2f970c6304d8ea0ac2c206d21b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5247313468841824799, guid: a23acf2f970c6304d8ea0ac2c206d21b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
