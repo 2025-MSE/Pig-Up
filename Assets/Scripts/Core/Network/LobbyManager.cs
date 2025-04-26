@@ -2,6 +2,7 @@
  * Owner: Dongjin Kuk
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -30,6 +31,8 @@ namespace MSE.Core
 
         private Lobby m_MyLobby = null;
         public Lobby MyLobby => m_MyLobby;
+
+        public Action OnLobbyUpdated;
 
         public async Task<Lobby> CreateLobby(string lobbyName, int maxPlayers, int stage)
         {
@@ -93,25 +96,27 @@ namespace MSE.Core
         {
             try
             {
-                Lobby joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
-                m_MyLobby = joinedLobby;
-
-                UpdatePlayerOptions upOptions = new UpdatePlayerOptions();
-                upOptions.Data = new Dictionary<string, PlayerDataObject>()
+                JoinLobbyByIdOptions options = new JoinLobbyByIdOptions
                 {
-                    {
-                        "name", new PlayerDataObject(
-                            visibility: PlayerDataObject.VisibilityOptions.Public,
-                            value: AuthenticationService.Instance.PlayerName)
-                    },
+                    Player = new Unity.Services.Lobbies.Models.Player(
+                        id: AuthenticationService.Instance.PlayerId,
+                        data: new Dictionary<string, PlayerDataObject>
+                        {
+                            {
+                                "name", new PlayerDataObject(
+                                    visibility: PlayerDataObject.VisibilityOptions.Public,
+                                    value: AuthenticationService.Instance.PlayerName
+                                )
+                            }
+                        }
+                    )
                 };
+                Lobby joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
+                m_MyLobby = joinedLobby;
 
                 var callbacks = new LobbyEventCallbacks();
                 callbacks.LobbyChanged += OnLobbyChanged;
                 await LobbyService.Instance.SubscribeToLobbyEventsAsync(joinedLobby.Id, callbacks);
-
-                string playerId = AuthenticationService.Instance.PlayerId;
-                await LobbyService.Instance.UpdatePlayerAsync(joinedLobby.Id, playerId, upOptions);
             }
             catch (LobbyServiceException e)
             {
@@ -199,14 +204,14 @@ namespace MSE.Core
 
         public async void OnLobbyChanged(ILobbyChanges changes)
         {
-            Debug.Log(changes);
             if (changes.LobbyDeleted)
             {
-
+                return;
             }
             else
             {
                 changes.ApplyToLobby(m_MyLobby);
+                OnLobbyUpdated?.Invoke();
             }
 
             if (m_MyLobby.Data.ContainsKey("joinCode"))

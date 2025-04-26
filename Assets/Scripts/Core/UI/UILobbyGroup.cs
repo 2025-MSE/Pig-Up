@@ -17,7 +17,7 @@ namespace MSE.Core
             await LobbyManager.Instance.CreateLobby($"Lobby{randLobbySuffix}", 3, 1);
 
             m_RoomGroup.gameObject.SetActive(true);
-            m_RoomGroup.Config(true);
+            m_RoomGroup.Config();
         }
 
         public void OnRefreshButtonPressed()

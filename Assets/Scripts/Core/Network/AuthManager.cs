@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -21,71 +22,40 @@ namespace MSE.Core
             }
         }
 
-        public IEnumerator SignUpCoroutine(string username, string password, string email)
+        public IEnumerator SignUpCoroutine(string username, string password, string playername, Action<bool> callback)
         {
-            var dataBody = new Dictionary<string, string>
-            {
-                { "username", username },
-                { "password", password },
-                { "email", email }
-            };
-            string dataJson = JsonConvert.SerializeObject(dataBody);
-
             Task signUpTask = AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
             yield return new WaitUntil(() => signUpTask.IsCompleted);
 
             if (signUpTask.Exception != null)
             {
                 Debug.LogException(signUpTask.Exception);
+                callback?.Invoke(false);
                 yield break;
             }
 
-            Task updatePlayerNameTask = AuthenticationService.Instance.UpdatePlayerNameAsync(username);
+            Task updatePlayerNameTask = AuthenticationService.Instance.UpdatePlayerNameAsync(playername);
             yield return new WaitUntil(() => updatePlayerNameTask.IsCompleted);
 
-            //using (UnityWebRequest request = new UnityWebRequest($"{ServerRef.BASE_URL}/api/users/signup", "POST"))
-            //{
-            //    byte[] jsonBytes = Encoding.UTF8.GetBytes(dataJson);
-            //    request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-            //    request.downloadHandler = new DownloadHandlerBuffer();
-            //    request.SetRequestHeader("Content-Type", "application/json");
-
-            //    yield return request.SendWebRequest();
-            //}
+            callback?.Invoke(true);
         }
 
-        public IEnumerator LoginCoroutine(string username, string password)
+        public IEnumerator LoginCoroutine(string username, string password, Action<bool> callback)
         {
-            var dataBody = new Dictionary<string, string>
-            {
-                { "username", username },
-                { "password", password }
-            };
-            string dataJson = JsonConvert.SerializeObject(dataBody);
-
             Task loginTask = AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
             yield return new WaitUntil(() => loginTask.IsCompleted);
 
             if (loginTask.Exception != null)
             {
                 Debug.LogException(loginTask.Exception);
+                callback?.Invoke(false);
                 yield break;
             }
 
             Task updatePlayerNameTask = AuthenticationService.Instance.UpdatePlayerNameAsync(username);
             yield return new WaitUntil(() => updatePlayerNameTask.IsCompleted);
 
-            //using (UnityWebRequest request = new UnityWebRequest($"{ServerRef.BASE_URL}/apis/users/login", "POST"))
-            //{
-            //    byte[] jsonBytes = Encoding.UTF8.GetBytes(dataJson);
-            //    request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-            //    request.downloadHandler = new DownloadHandlerBuffer();
-            //    request.SetRequestHeader("Content-Type", "application/json");
-
-            //    yield return request.SendWebRequest();
-
-            //    Debug.Log(request.downloadHandler.text);
-            //}
+            callback?.Invoke(true);
         }
     }
 }
