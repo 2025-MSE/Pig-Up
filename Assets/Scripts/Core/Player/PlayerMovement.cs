@@ -18,6 +18,7 @@ namespace MSE.Core
 
         [SerializeField] private float m_MoveSpeed = 5f;
         [SerializeField] private float m_JumpHeight = 3f;
+        [SerializeField] private float m_FlySpeed = 5f;
         [SerializeField] private float m_MouseSensitivity = 100f;
         private Vector2 m_Direction;
         private Vector2 m_MouseDelta;
@@ -32,6 +33,9 @@ namespace MSE.Core
 
         private bool m_Flying = false;
         private float m_LastJumpElapsedTime = 0f;
+
+        private bool m_Rising = false;
+        private bool m_Falling = false;
 
         private void Awake()
         {
@@ -92,6 +96,9 @@ namespace MSE.Core
             else
             {
                 m_Velocity.y = 0f;
+
+                if (m_Rising) m_Velocity.y += m_FlySpeed;
+                if (m_Falling) m_Velocity.y -= m_FlySpeed;
             }
 
             m_CharacterController.Move(m_Velocity * Time.fixedDeltaTime);
@@ -129,6 +136,21 @@ namespace MSE.Core
 
                     m_LastJumpElapsedTime = 0.5f;
                 }
+            }
+
+            if (m_Flying)
+            {
+                m_Rising = context.performed;
+            }
+        }
+
+        public void OnCrouch(InputAction.CallbackContext context)
+        {
+            if (!IsOwner) return;
+
+            if (m_Flying)
+            {
+                m_Falling = context.performed;
             }
         }
 
