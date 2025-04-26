@@ -3,6 +3,7 @@
  */
 
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,12 +14,18 @@ namespace MSE.Core
         [SerializeField]
         private Camera m_Camera;
 
+        private Animator m_Animator;
+        public Animator Animator => m_Animator;
+
+        private void Awake()
+        {
+            m_Animator = GetComponentInChildren<Animator>();
+            m_Camera.gameObject.SetActive(false);
+        }
+
         public override void OnNetworkSpawn()
         {
-            if (!IsOwner) return;
-
-            m_Camera.gameObject.SetActive(true);
-            Debug.Log($"IsOwner: {IsOwner}");
+            m_Camera.gameObject.SetActive(IsOwner);
         }
     }
 

@@ -3,6 +3,7 @@
  */
 
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,18 +12,21 @@ namespace MSE.Core
 {
     public class PlayerMovement : NetworkBehaviour
     {
+        private Player m_Player;
+
         private CharacterController m_CharacterController;
 
         [SerializeField] private float m_MoveSpeed = 5f;
         [SerializeField] private float m_JumpHeight = 3f;
+        [SerializeField] private float m_FlySpeed = 5f;
         [SerializeField] private float m_MouseSensitivity = 100f;
         private Vector2 m_Direction;
         private Vector2 m_MouseDelta;
 
         private float m_XRotation = 0f;
 
-        [SerializeField]
-        private Transform m_RotTransform;
+        [SerializeField] private Transform m_RenderRotTransform;
+        [SerializeField] private Transform m_ViewRotTransform;
 
         private Vector3 m_Velocity = Vector3.zero;
         private bool m_JumpPressed = false;
@@ -30,8 +34,12 @@ namespace MSE.Core
         private bool m_Flying = false;
         private float m_LastJumpElapsedTime = 0f;
 
+        private bool m_Rising = false;
+        private bool m_Falling = false;
+
         private void Awake()
         {
+            m_Player = GetComponent<Player>();
             m_CharacterController = GetComponent<CharacterController>();
         }
 
@@ -45,7 +53,8 @@ namespace MSE.Core
             m_XRotation -= mouseY;
             m_XRotation = Mathf.Clamp(m_XRotation, -90f, 90f);
 
-            m_RotTransform.localRotation = Quaternion.Euler(m_XRotation, 0f, 0f);
+            m_ViewRotTransform.localRotation = Quaternion.Euler(m_XRotation, 0f, 0f);
+            m_RenderRotTransform.localRotation = Quaternion.Euler(0f, 0f, m_XRotation);
             transform.Rotate(Vector3.up * mouseX);
 
             m_LastJumpElapsedTime -= Time.deltaTime;
@@ -53,6 +62,10 @@ namespace MSE.Core
             {
                 m_LastJumpElapsedTime = 0f;
             }
+
+            Vector2 hvelocity = new Vector2(m_Velocity.x, m_Velocity.z);
+            float currSpeed = hvelocity.magnitude;
+            m_Player.Animator.SetBool("walking", currSpeed > 0.5f);
         }
 
         private void FixedUpdate()
@@ -83,6 +96,9 @@ namespace MSE.Core
             else
             {
                 m_Velocity.y = 0f;
+
+                if (m_Rising) m_Velocity.y += m_FlySpeed;
+                if (m_Falling) m_Velocity.y -= m_FlySpeed;
             }
 
             m_CharacterController.Move(m_Velocity * Time.fixedDeltaTime);
@@ -104,7 +120,7 @@ namespace MSE.Core
         {
             if (!IsOwner) return;
 
-            if (context.started || context.performed)
+            if (context.started)
             {
                 if (m_LastJumpElapsedTime > 0f)
                 {
@@ -113,9 +129,28 @@ namespace MSE.Core
                 }
                 else
                 {
-                    m_JumpPressed = true;
+                    if (m_CharacterController.isGrounded)
+                    {
+                        m_JumpPressed = true;
+                    }
+
                     m_LastJumpElapsedTime = 0.5f;
                 }
+            }
+
+            if (m_Flying)
+            {
+                m_Rising = context.performed;
+            }
+        }
+
+        public void OnCrouch(InputAction.CallbackContext context)
+        {
+            if (!IsOwner) return;
+
+            if (m_Flying)
+            {
+                m_Falling = context.performed;
             }
         }
 
