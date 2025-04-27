@@ -6,20 +6,30 @@ namespace MSE.Core
     public class Block : NetworkBehaviour
     {
         public int Index = -1;
+        public int BuiltIndex = -1;
 
         private BlockBoundary m_Boundary;
+
+        private BlockDetection m_Detection;
+        public BlockDetection Detection => m_Detection;
+
+        private GameObject m_DetecteeObj;
 
         private Renderer m_Renderer;
 
         private void Awake()
         {
             m_Boundary = GetComponentInChildren<BlockBoundary>();
+            m_Detection = GetComponentInChildren<BlockDetection>();
             m_Renderer = GetComponentInChildren<Renderer>();
+            m_DetecteeObj = transform.Find("Detectee").gameObject;
         }
 
         public void ReadyToBuild()
         {
             m_Boundary.SetBoundaryActive(false);
+            m_Detection.gameObject.SetActive(true);
+            m_DetecteeObj.SetActive(false);
             foreach (var mat in m_Renderer.materials)
             {
                 Color color = mat.color;
@@ -28,9 +38,18 @@ namespace MSE.Core
             }
         }
 
+        public void ConfigBuilding()
+        {
+            m_Boundary.SetBoundaryActive(false);
+            m_Detection.gameObject.SetActive(false);
+            m_DetecteeObj.SetActive(true);
+        }
+
         public void OnBuilt()
         {
             m_Boundary.SetBoundaryActive(true);
+            m_Detection.gameObject.SetActive(false);
+            m_DetecteeObj.SetActive(false);
             foreach (var mat in m_Renderer.materials)
             {
                 Color color = mat.color;

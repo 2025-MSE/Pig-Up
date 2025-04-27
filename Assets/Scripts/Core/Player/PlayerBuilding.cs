@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,7 +27,7 @@ namespace MSE.Core
             if (!IsOwner) return;
 
             Cursor.lockState = CursorLockMode.Locked;
-            SetBlock(DataManager.GetBlock(0));
+            SetBlock(DataManager.GetBlock(144));
         }
 
         private void Update()
@@ -58,7 +59,7 @@ namespace MSE.Core
 
             if (context.performed)
             {
-                BuildRpc(m_BlockIndex, m_CurrPos, m_BlockSilhoutte.transform.rotation);
+                BuildRpc(m_BlockIndex, m_CurrPos, m_BlockSilhoutte.transform.rotation, m_BlockSilhoutte.Detection.DetectedBuiltIndice.ToArray());
             }
         }
 
@@ -93,7 +94,7 @@ namespace MSE.Core
         }
 
         [Rpc(SendTo.Server)]
-        public void BuildRpc(int blockIndex, Vector3 pos, Quaternion rot, RpcParams rpcParams = default)
+        public void BuildRpc(int blockIndex, Vector3 pos, Quaternion rot, int[] builtIndice, RpcParams rpcParams = default)
         {
             NetworkObject nobj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
                 networkPrefab: DataManager.GetBlock(blockIndex).GetComponent<NetworkObject>(),
@@ -102,6 +103,7 @@ namespace MSE.Core
                 rotation: rot);
             Block block = nobj.GetComponent<Block>();
             block.OnBuilt();
+            GameEventCallbacks.OnBlockBuilt?.Invoke(block, builtIndice);
         }
     }
 }

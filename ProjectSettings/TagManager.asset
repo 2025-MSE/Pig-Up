@@ -14,8 +14,8 @@ TagManager:
   - 
   - BlockBoundary
   - Wall
-  - 
-  - 
+  - BlockDetection
+  - BlockDetectee
   - 
   - 
   - 

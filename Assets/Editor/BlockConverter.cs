@@ -97,13 +97,15 @@ public class BlockConverter : EditorWindow
     {
         string[] models = Directory.GetFiles(modelFolderPath, "*.fbx", SearchOption.AllDirectories);
 
+        int bindex = 0;
         foreach (string model in models)
         {
-            Convert(model);
+            Convert(model, bindex);
+            bindex += 1;
         }
     }
 
-    private void Convert(string modelPath)
+    private void Convert(string modelPath, int index)
     {
         GameObject modelAsset = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
         GameObject modelObj = (GameObject)PrefabUtility.InstantiatePrefab(modelAsset);
@@ -111,21 +113,43 @@ public class BlockConverter : EditorWindow
         GameObject blockPrefObj = new GameObject(modelObj.name);
         modelObj.transform.SetParent(blockPrefObj.transform);
 
+        Rigidbody rigidbody = blockPrefObj.AddComponent<Rigidbody>();
+        rigidbody.isKinematic = true;
+
         NetworkObject nobj = blockPrefObj.AddComponent<NetworkObject>();
         nobj.DontDestroyWithOwner = true;
-        blockPrefObj.AddComponent<Block>();
+        Block blockComp = blockPrefObj.AddComponent<Block>();
+        blockComp.Index = index;
 
         GameObject boundaryObj = new GameObject("Boundary");
         boundaryObj.transform.SetParent(blockPrefObj.transform);
         boundaryObj.AddComponent<BlockBoundary>();
+        GameObject detectionObj = new GameObject("Detection");
+        detectionObj.transform.SetParent(blockPrefObj.transform);
+        detectionObj.AddComponent<BlockDetection>();
+        GameObject detecteeObj = new GameObject("Detectee");
+        detecteeObj.transform.SetParent(blockPrefObj.transform);
 
         BoxCollider ghboxCollider = modelObj.AddComponent<BoxCollider>();
         BoxCollider boxCollider = boundaryObj.AddComponent<BoxCollider>();
+        BoxCollider dtboxCollider = detectionObj.AddComponent<BoxCollider>();
+        BoxCollider dteboxCollider = detecteeObj.AddComponent<BoxCollider>();
+
         boxCollider.center = ghboxCollider.center;
         boxCollider.size = ghboxCollider.size;
+        boxCollider.isTrigger = true;
+        dtboxCollider.center = ghboxCollider.center;
+        dtboxCollider.size = ghboxCollider.size;
+        dtboxCollider.isTrigger = true;
+        dteboxCollider.center = ghboxCollider.center;
+        dteboxCollider.size = ghboxCollider.size * 0.8f;
+        dteboxCollider.isTrigger = true;
+        
         DestroyImmediate(ghboxCollider);
 
         boundaryObj.layer = LayerMask.NameToLayer("BlockBoundary");
+        detectionObj.layer = LayerMask.NameToLayer("BlockDetection");
+        detecteeObj.layer = LayerMask.NameToLayer("BlockDetectee");
 
         string prefabPath = $"{prefabFolderPath}/{modelObj.name}.prefab";
         PrefabUtility.SaveAsPrefabAsset(blockPrefObj, prefabPath);
