@@ -43,6 +43,12 @@ namespace MSE.Core
             m_Boundary.SetBoundaryActive(false);
             m_Detection.gameObject.SetActive(false);
             m_DetecteeObj.SetActive(true);
+            foreach (var mat in m_Renderer.materials)
+            {
+                Color color = mat.color;
+                color.a = 0.2f;
+                mat.color = color;
+            }
         }
 
         public void OnBuilt()

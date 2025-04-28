@@ -14,9 +14,8 @@ namespace MSE.Core
 
         public override void OnNetworkSpawn()
         {
-            if (!IsOwner) return;
-
             m_Blocks = m_BlockRoot.GetComponentsInChildren<Block>().ToList();
+            GameController.OnBuildingSpawned?.Invoke(this);
         }
     }
 }

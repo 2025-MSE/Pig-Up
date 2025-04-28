@@ -1,15 +1,27 @@
+using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace MSE.Core
 {
     public class GameController : NetworkBehaviour
     {
+        [SerializeField]
+        private GameMap m_GameMap;
+
         private Building m_Building;
+
+        public static Action<Building> OnBuildingSpawned;
 
         public override void OnNetworkSpawn()
         {
+            OnBuildingSpawned += OnBuildingSpawn;
+            NetworkObject nplayer = NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject;
+            nplayer.transform.position = m_GameMap.PlayerSpawnPoints[0].position;
+
             if (!IsOwner) return;
 
             GameEventCallbacks.OnBlockBuilt += OnBlockBuilt;
@@ -20,12 +32,15 @@ namespace MSE.Core
         private void CreateBuilding()
         {
             StageData stageData = DataManager.GetStageData(0);
-            NetworkObject nbuildingObj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
+            NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
                 networkPrefab: stageData.BuildingPrefab.GetComponent<NetworkObject>(),
-                position: Vector3.zero,
+                position: m_GameMap.BuildingSpawnPoint.position,
                 rotation: Quaternion.identity);
-            m_Building = nbuildingObj.GetComponent<Building>();
-            
+        }
+
+        private void OnBuildingSpawn(Building building)
+        {
+            m_Building = building;
             for (int i = 0; i < m_Building.Blocks.Count; i++)
             {
                 Block block = m_Building.Blocks[i];
@@ -53,8 +68,11 @@ namespace MSE.Core
         [Rpc(SendTo.ClientsAndHost)]
         private void AdjustBlockRpc(ulong netBlockId, int builtIndex)
         {
-            NetworkManager.Singleton.SpawnManager.SpawnedObjects[netBlockId].transform.localScale = Vector3.one * 1.5f;
-            //m_Building.Blocks[builtIndex].gameObject.SetActive(false);
+            var nobj = NetworkManager.Singleton.SpawnManager.SpawnedObjects[netBlockId];
+            var tblock = m_Building.Blocks[builtIndex];
+
+            nobj.transform.DOMove(tblock.transform.position, 0.5f);
+            nobj.transform.DORotate(tblock.transform.rotation.eulerAngles, 0.5f);
         }
     }
 }
