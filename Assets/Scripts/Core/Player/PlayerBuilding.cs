@@ -7,8 +7,8 @@ namespace MSE.Core
 {
     public class PlayerBuilding : NetworkBehaviour
     {
-        [SerializeField]
-        private LayerMask m_LayerMask;
+        [SerializeField] private LayerMask m_BuildLayerMask;
+        [SerializeField] private LayerMask m_SelectLayerMask;
 
         int m_BlockIndex = 0;
         private Block m_BlockSilhoutte;
@@ -37,7 +37,7 @@ namespace MSE.Core
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 5.0f, m_LayerMask))
+            if (Physics.Raycast(ray, out hit, 10.0f, m_BuildLayerMask))
             {
                 m_CurrPos = hit.point;
                 
@@ -50,6 +50,25 @@ namespace MSE.Core
             else
             {
                 m_BlockSilhoutte?.gameObject.SetActive(false);
+            }
+        }
+
+        public void OnSelect(InputAction.CallbackContext context)
+        {
+            if (!IsOwner) return;
+
+            if (context.performed)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 5.0f, m_SelectLayerMask))
+                {
+                    if (hit.collider.transform.parent.TryGetComponent(out Block block))
+                    {
+                        SetBlock(DataManager.GetBlock(block.Index));
+                    }
+                }
             }
         }
 

@@ -6,6 +6,7 @@ namespace MSE.Core
     public class Block : NetworkBehaviour
     {
         public int Index = -1;
+        [HideInInspector]
         public int BuiltIndex = -1;
 
         private BlockBoundary m_Boundary;
@@ -16,6 +17,9 @@ namespace MSE.Core
         private GameObject m_DetecteeObj;
 
         private Renderer m_Renderer;
+
+        private bool m_IsPartition = false;
+        private bool m_Checked = false;
 
         private void Awake()
         {
@@ -49,6 +53,16 @@ namespace MSE.Core
                 color.a = 0.2f;
                 mat.color = color;
             }
+
+            m_Checked = false;
+        }
+
+        public void ConfigPartition()
+        {
+            m_Boundary.SetBoundaryActive(false);
+            m_Detection.gameObject.SetActive(false);
+            m_DetecteeObj.SetActive(false);
+            m_IsPartition = true;
         }
 
         public void OnBuilt()
@@ -62,6 +76,20 @@ namespace MSE.Core
                 color.a = 1f;
                 mat.color = color;
             }
+        }
+
+        public void SetChecked(bool isChecked)
+        {
+            m_Checked = isChecked;
+        }
+        public bool IsChecked()
+        {
+            return m_Checked;
+        }
+
+        public bool IsPartition()
+        {
+            return m_IsPartition;
         }
     }
 }

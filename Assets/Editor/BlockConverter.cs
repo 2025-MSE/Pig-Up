@@ -129,11 +129,14 @@ public class BlockConverter : EditorWindow
         detectionObj.AddComponent<BlockDetection>();
         GameObject detecteeObj = new GameObject("Detectee");
         detecteeObj.transform.SetParent(blockPrefObj.transform);
+        GameObject selectionObj = new GameObject("Selection");
+        selectionObj.transform.SetParent(blockPrefObj.transform);
 
         BoxCollider ghboxCollider = modelObj.AddComponent<BoxCollider>();
         BoxCollider boxCollider = boundaryObj.AddComponent<BoxCollider>();
         BoxCollider dtboxCollider = detectionObj.AddComponent<BoxCollider>();
         BoxCollider dteboxCollider = detecteeObj.AddComponent<BoxCollider>();
+        BoxCollider selboxCollider = selectionObj.AddComponent<BoxCollider>();
 
         boxCollider.center = ghboxCollider.center;
         boxCollider.size = ghboxCollider.size;
@@ -144,12 +147,16 @@ public class BlockConverter : EditorWindow
         dteboxCollider.center = ghboxCollider.center;
         dteboxCollider.size = ghboxCollider.size * 0.8f;
         dteboxCollider.isTrigger = true;
+        selboxCollider.center = ghboxCollider.center;
+        selboxCollider.size = ghboxCollider.size;
+        selboxCollider.isTrigger = true;
         
         DestroyImmediate(ghboxCollider);
 
         boundaryObj.layer = LayerMask.NameToLayer("BlockBoundary");
         detectionObj.layer = LayerMask.NameToLayer("BlockDetection");
         detecteeObj.layer = LayerMask.NameToLayer("BlockDetectee");
+        selectionObj.layer = LayerMask.NameToLayer("BlockSelection");
 
         string prefabPath = $"{prefabFolderPath}/{modelObj.name}.prefab";
         PrefabUtility.SaveAsPrefabAsset(blockPrefObj, prefabPath);

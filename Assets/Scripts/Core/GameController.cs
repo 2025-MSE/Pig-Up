@@ -54,6 +54,7 @@ namespace MSE.Core
             List<Block> builtBlocks = new List<Block>();
             foreach (int builtIndex in builtIndice)
             {
+                if (m_Building.Blocks[builtIndex].IsChecked()) continue;
                 builtBlocks.Add(m_Building.Blocks[builtIndex]);
             }
 
@@ -73,6 +74,22 @@ namespace MSE.Core
 
             nobj.transform.DOMove(tblock.transform.position, 0.5f);
             nobj.transform.DORotate(tblock.transform.rotation.eulerAngles, 0.5f);
+
+            tblock.SetChecked(true);
+            CheckBuildingRpc();
+        }
+
+        [Rpc(SendTo.Server)]
+        private void CheckBuildingRpc()
+        {
+            int checkCount = 0;
+            foreach (Block block in m_Building.Blocks)
+            {
+                if (block.IsChecked())
+                    checkCount += 1;
+            }
+
+            Debug.Log($"Check: {checkCount}/{m_Building.Blocks.Count}");
         }
     }
 }
