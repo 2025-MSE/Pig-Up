@@ -110,6 +110,8 @@ public class BlockConverter : EditorWindow
         GameObject modelAsset = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
         GameObject modelObj = (GameObject)PrefabUtility.InstantiatePrefab(modelAsset);
 
+        modelObj.AddComponent<BlockRenderer>();
+
         GameObject blockPrefObj = new GameObject(modelObj.name);
         modelObj.transform.SetParent(blockPrefObj.transform);
 
@@ -157,6 +159,8 @@ public class BlockConverter : EditorWindow
         detectionObj.layer = LayerMask.NameToLayer("BlockDetection");
         detecteeObj.layer = LayerMask.NameToLayer("BlockDetectee");
         selectionObj.layer = LayerMask.NameToLayer("BlockSelection");
+
+        blockPrefObj.transform.localScale = new Vector3(5f, 5f, 5f);
 
         string prefabPath = $"{prefabFolderPath}/{modelObj.name}.prefab";
         PrefabUtility.SaveAsPrefabAsset(blockPrefObj, prefabPath);

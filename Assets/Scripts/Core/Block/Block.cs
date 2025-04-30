@@ -16,7 +16,10 @@ namespace MSE.Core
 
         private GameObject m_DetecteeObj;
 
-        private Renderer m_Renderer;
+        private GameObject m_SelectionObj;
+
+        private BlockRenderer m_Renderer;
+        public BlockRenderer Renderer => m_Renderer;
 
         private bool m_IsPartition = false;
         private bool m_Checked = false;
@@ -25,62 +28,71 @@ namespace MSE.Core
         {
             m_Boundary = GetComponentInChildren<BlockBoundary>();
             m_Detection = GetComponentInChildren<BlockDetection>();
-            m_Renderer = GetComponentInChildren<Renderer>();
+            m_Renderer = GetComponentInChildren<BlockRenderer>();
             m_DetecteeObj = transform.Find("Detectee").gameObject;
+            m_SelectionObj = transform.Find("Selection").gameObject;
         }
 
+        /// <summary>
+        /// Invoked when the block is spawned with silhouette.
+        /// </summary>
         public void ReadyToBuild()
         {
             m_Boundary.SetBoundaryActive(false);
             m_Detection.gameObject.SetActive(true);
             m_DetecteeObj.SetActive(false);
-            foreach (var mat in m_Renderer.materials)
-            {
-                Color color = mat.color;
-                color.a = 0.5f;
-                mat.color = color;
-            }
+            m_SelectionObj.SetActive(false);
+            m_Renderer.SetTransparency(0.5f);
         }
 
-        public void ConfigBuilding()
+        /// <summary>
+        /// Invoked when the block is spawned in building.
+        /// </summary>
+        [Rpc(SendTo.ClientsAndHost)]
+        public void ConfigBuildingRpc()
         {
             m_Boundary.SetBoundaryActive(false);
             m_Detection.gameObject.SetActive(false);
             m_DetecteeObj.SetActive(true);
-            foreach (var mat in m_Renderer.materials)
-            {
-                Color color = mat.color;
-                color.a = 0.2f;
-                mat.color = color;
-            }
+            m_SelectionObj.SetActive(false);
+            m_Renderer.SetTransparency(0.2f);
 
             m_Checked = false;
         }
 
-        public void ConfigPartition()
+        /// <summary>
+        /// Invoked when the block is spawned with partition.
+        /// </summary>
+        [Rpc(SendTo.ClientsAndHost)]
+        public void ConfigPartitionRpc()
         {
             m_Boundary.SetBoundaryActive(false);
             m_Detection.gameObject.SetActive(false);
             m_DetecteeObj.SetActive(false);
+            m_SelectionObj.SetActive(true);
             m_IsPartition = true;
         }
 
+        /// <summary>
+        /// Invoked when the block is built by the player.
+        /// </summary>
         public void OnBuilt()
         {
             m_Boundary.SetBoundaryActive(true);
             m_Detection.gameObject.SetActive(false);
             m_DetecteeObj.SetActive(false);
-            foreach (var mat in m_Renderer.materials)
-            {
-                Color color = mat.color;
-                color.a = 1f;
-                mat.color = color;
-            }
+            m_SelectionObj.SetActive(false);
+            m_Renderer.SetTransparency(1f);
         }
 
+        /// <summary>
+        /// When the building block is placed(by the silhouette), it will be checked.
+        /// </summary>
+        /// <param name="isChecked"></param>
         public void SetChecked(bool isChecked)
         {
             m_Checked = isChecked;
+            m_DetecteeObj.SetActive(false);
         }
         public bool IsChecked()
         {

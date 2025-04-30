@@ -633,10 +633,10 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_BuildLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_SelectLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   m_RotSpeed: 3
 --- !u!114 &5822940356705099194
 MonoBehaviour:

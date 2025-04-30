@@ -19,16 +19,22 @@ namespace MSE.Core
         [SerializeField]
         private Button m_StartButton;
 
-        private void Awake()
+        private void OnEnable()
         {
-            m_Slots = m_SlotRoot.GetComponentsInChildren<UIRoomPlayerSlot>().ToList();
+            LobbyManager.Instance.OnLobbyUpdated += OnUpdated;
+        }
+
+        private void OnDisable()
+        {
+            LobbyManager.Instance.OnLobbyUpdated -= OnUpdated;
         }
 
         public void Config()
         {
-            Refresh();
+            m_Slots.Clear();
+            m_Slots = m_SlotRoot.GetComponentsInChildren<UIRoomPlayerSlot>(true).ToList();
 
-            LobbyManager.Instance.OnLobbyUpdated += OnUpdated;
+            Refresh();
         }
 
         public void Refresh()
@@ -37,6 +43,8 @@ namespace MSE.Core
             m_RoomNameText.text = myLobby.Name;
             for (int i = 0; i < myLobby.Players.Count; i++)
             {
+                Debug.Log(m_Slots[i]);
+
                 var player = myLobby.Players[i];
                 m_Slots[i].gameObject.SetActive(true);
                 m_Slots[i].Config(player.Data["name"].Value);

@@ -20,6 +20,7 @@ namespace MSE.Core
             if (other.transform.parent.TryGetComponent(out Block block))
             {
                 if (block.Index != m_Block.Index) return;
+                if (block.BuiltIndex == -1) return;
                 if (m_DetectedBuiltIndice.Contains(block.BuiltIndex)) return;
 
                 m_DetectedBuiltIndice.Add(block.BuiltIndex);

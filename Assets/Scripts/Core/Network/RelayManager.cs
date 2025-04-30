@@ -33,5 +33,10 @@ namespace MSE.Core
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, connectionType));
             return !string.IsNullOrEmpty(joinCode);
         }
+
+        public void Shutdown()
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
     }
 }

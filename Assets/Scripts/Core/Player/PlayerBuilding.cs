@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.UI;
 
 namespace MSE.Core
 {
@@ -37,10 +39,10 @@ namespace MSE.Core
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 10.0f, m_BuildLayerMask))
+            if (Physics.Raycast(ray, out hit, 15f, m_BuildLayerMask))
             {
                 m_CurrPos = hit.point;
-                
+
                 if (m_BlockSilhoutte)
                 {
                     m_BlockSilhoutte.gameObject.SetActive(true);
@@ -62,11 +64,22 @@ namespace MSE.Core
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit, 5.0f, m_SelectLayerMask))
+                if (Physics.Raycast(ray, out hit, 15f, m_SelectLayerMask))
                 {
                     if (hit.collider.transform.parent.TryGetComponent(out Block block))
                     {
                         SetBlock(DataManager.GetBlock(block.Index));
+                    }
+                }
+
+                if (Physics.Raycast(ray, out hit, 15f, m_BuildLayerMask))
+                {
+                    if (hit.collider.transform.parent.TryGetComponent(out Block block))
+                    {
+                        if (block.IsChecked()) return;
+
+                        ulong nobjIndex = block.GetComponent<NetworkObject>().NetworkObjectId;
+                        BreakRpc(nobjIndex);
                     }
                 }
             }
@@ -98,17 +111,13 @@ namespace MSE.Core
         {
             if (!IsOwner) return;
 
-            m_BlockIndex = block.Index;
-            m_BlockSilhoutte = Instantiate(DataManager.GetBlock(block.Index));
-
-            MeshRenderer mrenderer = m_BlockSilhoutte.GetComponentInChildren<MeshRenderer>();
-            foreach (Material mat in mrenderer.materials)
+            if (m_BlockSilhoutte != null)
             {
-                Color color = mat.color;
-                color.a = 0.5f;
-                mat.color = color;
+                Destroy(m_BlockSilhoutte.gameObject);
             }
 
+            m_BlockIndex = block.Index;
+            m_BlockSilhoutte = Instantiate(DataManager.GetBlock(block.Index));
             m_BlockSilhoutte.ReadyToBuild();
         }
 
@@ -123,6 +132,13 @@ namespace MSE.Core
             Block block = nobj.GetComponent<Block>();
             block.OnBuilt();
             GameEventCallbacks.OnBlockBuilt?.Invoke(block, builtIndice);
+        }
+
+        [Rpc(SendTo.Server)]
+        public void BreakRpc(ulong nobjIndex)
+        {
+            NetworkObject tnobj = NetworkManager.Singleton.SpawnManager.SpawnedObjects[nobjIndex];
+            tnobj.Despawn();
         }
     }
 }
