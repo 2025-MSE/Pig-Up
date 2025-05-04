@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MSE.Core
@@ -10,6 +11,10 @@ namespace MSE.Core
         private BlockData m_BlockData;
         public static BlockData BlockData;
 
+        [SerializeField]
+        private List<StageData> m_StageDatas;
+        public static List<StageData> StageDatas;
+
         private void Awake()
         {
             if (m_Initialized)
@@ -21,16 +26,13 @@ namespace MSE.Core
             m_Initialized = true;
             DontDestroyOnLoad(gameObject);
             InitializeBlockData();
+            InitializeStageData();
         }
 
         #region BlockData
         public void InitializeBlockData()
         {
             BlockData = m_BlockData;
-            for (int i = 0; i < m_BlockData.BlockPrefabs.Count; i++)
-            {
-                m_BlockData.BlockPrefabs[i].Index = i;
-            }
         }
 
         public static Block GetBlock(int index)
@@ -41,6 +43,23 @@ namespace MSE.Core
         {
             Block block = BlockData.BlockPrefabs.Find(prefab => prefab.name == name);
             return block;
+        }
+        #endregion
+
+        #region StageData
+        public void InitializeStageData()
+        {
+            StageDatas = m_StageDatas;
+        }
+
+        public static StageData GetStageData(int index)
+        {
+            return StageDatas[index];
+        }
+        public static StageData GetStageData(string name)
+        {
+            StageData stageData = StageDatas.Find(data => data.Name == name);
+            return stageData;
         }
         #endregion
     }

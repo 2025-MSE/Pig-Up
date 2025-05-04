@@ -13,10 +13,10 @@ TagManager:
   - UI
   - 
   - BlockBoundary
-  - 
-  - 
-  - 
-  - 
+  - Wall
+  - BlockDetection
+  - BlockDetectee
+  - BlockSelection
   - 
   - 
   - 

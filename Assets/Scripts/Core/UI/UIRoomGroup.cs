@@ -15,42 +15,43 @@ namespace MSE.Core
         [SerializeField]
         private Transform m_SlotRoot;
         private List<UIRoomPlayerSlot> m_Slots = new List<UIRoomPlayerSlot>();
-        public List<UIRoomPlayerSlot> Slots
-        {
-            get
-            {
-                if (m_Slots.Count == 0)
-                {
-                    m_Slots = m_SlotRoot.GetComponentsInChildren<UIRoomPlayerSlot>().ToList();
-                }
-                return m_Slots;
-            }
-        }
 
         [SerializeField]
         private Button m_StartButton;
 
+        private void OnEnable()
+        {
+            LobbyManager.Instance.OnLobbyUpdated += OnUpdated;
+        }
+
+        private void OnDisable()
+        {
+            LobbyManager.Instance.OnLobbyUpdated -= OnUpdated;
+        }
+
         public void Config()
         {
-            Refresh();
+            m_Slots.Clear();
+            m_Slots = m_SlotRoot.GetComponentsInChildren<UIRoomPlayerSlot>(true).ToList();
 
-            LobbyManager.Instance.OnLobbyUpdated += OnUpdated;
+            Refresh();
         }
 
         public void Refresh()
         {
             Lobby myLobby = LobbyManager.Instance.MyLobby;
             m_RoomNameText.text = myLobby.Name;
-            Debug.Log($"Slot Count: {Slots.Count}");
             for (int i = 0; i < myLobby.Players.Count; i++)
             {
+                Debug.Log(m_Slots[i]);
+
                 var player = myLobby.Players[i];
-                Slots[i].gameObject.SetActive(true);
-                Slots[i].Config(player.Data["name"].Value);
+                m_Slots[i].gameObject.SetActive(true);
+                m_Slots[i].Config(player.Data["name"].Value);
             }
-            for (int i = myLobby.Players.Count; i < Slots.Count; i++)
+            for (int i = myLobby.Players.Count; i < m_Slots.Count; i++)
             {
-                Slots[i].gameObject.SetActive(false);
+                m_Slots[i].gameObject.SetActive(false);
             }
 
             bool isOwner = myLobby.HostId == AuthenticationService.Instance.PlayerId;

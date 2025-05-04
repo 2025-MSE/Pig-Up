@@ -6,7 +6,7 @@ namespace MSE.Core
     {
         public void SetBoundaryActive(bool isActive)
         {
-            gameObject.layer = LayerMask.NameToLayer(isActive ? "BlockBoundary" : "Default");
+            gameObject.SetActive(isActive);
         }
     }
 }

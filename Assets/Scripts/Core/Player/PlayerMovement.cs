@@ -163,7 +163,7 @@ namespace MSE.Core
 
         private void ApplyGravity()
         {
-            m_Velocity.y += -9.81f * Time.fixedDeltaTime;
+            m_Velocity.y += -19.12f * Time.fixedDeltaTime;
         }
 
         private void Jump()

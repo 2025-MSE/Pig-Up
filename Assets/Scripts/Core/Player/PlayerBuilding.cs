@@ -1,13 +1,16 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.UI;
 
 namespace MSE.Core
 {
     public class PlayerBuilding : NetworkBehaviour
     {
-        [SerializeField]
-        private LayerMask m_LayerMask;
+        [SerializeField] private LayerMask m_BuildLayerMask;
+        [SerializeField] private LayerMask m_SelectLayerMask;
 
         int m_BlockIndex = 0;
         private Block m_BlockSilhoutte;
@@ -26,7 +29,7 @@ namespace MSE.Core
             if (!IsOwner) return;
 
             Cursor.lockState = CursorLockMode.Locked;
-            SetBlock(DataManager.GetBlock(0));
+            SetBlock(DataManager.GetBlock(144));
         }
 
         private void Update()
@@ -36,10 +39,10 @@ namespace MSE.Core
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 5.0f, m_LayerMask))
+            if (Physics.Raycast(ray, out hit, 15f, m_BuildLayerMask))
             {
                 m_CurrPos = hit.point;
-                
+
                 if (m_BlockSilhoutte)
                 {
                     m_BlockSilhoutte.gameObject.SetActive(true);
@@ -52,13 +55,43 @@ namespace MSE.Core
             }
         }
 
+        public void OnSelect(InputAction.CallbackContext context)
+        {
+            if (!IsOwner) return;
+
+            if (context.performed)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 15f, m_SelectLayerMask))
+                {
+                    if (hit.collider.transform.parent.TryGetComponent(out Block block))
+                    {
+                        SetBlock(DataManager.GetBlock(block.Index));
+                    }
+                }
+
+                if (Physics.Raycast(ray, out hit, 15f, m_BuildLayerMask))
+                {
+                    if (hit.collider.transform.parent.TryGetComponent(out Block block))
+                    {
+                        if (block.IsChecked()) return;
+
+                        ulong nobjIndex = block.GetComponent<NetworkObject>().NetworkObjectId;
+                        BreakRpc(nobjIndex);
+                    }
+                }
+            }
+        }
+
         public void OnBuild(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
 
             if (context.performed)
             {
-                BuildRpc(m_BlockIndex, m_CurrPos, m_BlockSilhoutte.transform.rotation);
+                BuildRpc(m_BlockIndex, m_CurrPos, m_BlockSilhoutte.transform.rotation, m_BlockSilhoutte.Detection.DetectedBuiltIndice.ToArray());
             }
         }
 
@@ -78,22 +111,18 @@ namespace MSE.Core
         {
             if (!IsOwner) return;
 
-            m_BlockIndex = block.Index;
-            m_BlockSilhoutte = Instantiate(DataManager.GetBlock(block.Index));
-
-            MeshRenderer mrenderer = m_BlockSilhoutte.GetComponentInChildren<MeshRenderer>();
-            foreach (Material mat in mrenderer.materials)
+            if (m_BlockSilhoutte != null)
             {
-                Color color = mat.color;
-                color.a = 0.5f;
-                mat.color = color;
+                Destroy(m_BlockSilhoutte.gameObject);
             }
 
+            m_BlockIndex = block.Index;
+            m_BlockSilhoutte = Instantiate(DataManager.GetBlock(block.Index));
             m_BlockSilhoutte.ReadyToBuild();
         }
 
         [Rpc(SendTo.Server)]
-        public void BuildRpc(int blockIndex, Vector3 pos, Quaternion rot, RpcParams rpcParams = default)
+        public void BuildRpc(int blockIndex, Vector3 pos, Quaternion rot, int[] builtIndice, RpcParams rpcParams = default)
         {
             NetworkObject nobj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
                 networkPrefab: DataManager.GetBlock(blockIndex).GetComponent<NetworkObject>(),
@@ -102,6 +131,14 @@ namespace MSE.Core
                 rotation: rot);
             Block block = nobj.GetComponent<Block>();
             block.OnBuilt();
+            GameEventCallbacks.OnBlockBuilt?.Invoke(block, builtIndice);
+        }
+
+        [Rpc(SendTo.Server)]
+        public void BreakRpc(ulong nobjIndex)
+        {
+            NetworkObject tnobj = NetworkManager.Singleton.SpawnManager.SpawnedObjects[nobjIndex];
+            tnobj.Despawn();
         }
     }
 }

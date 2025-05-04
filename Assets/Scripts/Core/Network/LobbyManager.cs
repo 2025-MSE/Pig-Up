@@ -217,13 +217,12 @@ namespace MSE.Core
             if (m_MyLobby.Data.ContainsKey("joinCode"))
             {
                 bool isHost = m_MyLobby.HostId == AuthenticationService.Instance.PlayerId;
-                await SceneManager.LoadSceneAsync("Game");
 
                 if (isHost)
                 {
+                    await SceneManager.LoadSceneAsync("Game");
                     NetworkManager.Singleton.StartHost();
-                }
-                else
+                } else
                 {
                     await RelayManager.Instance.StartClient(m_MyLobby.Data["joinCode"].Value);
                     NetworkManager.Singleton.StartClient();

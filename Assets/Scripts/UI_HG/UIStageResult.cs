@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using MSE.Core;
 
 public class UIStageResult : MonoBehaviour
 {
@@ -20,20 +21,14 @@ public class UIStageResult : MonoBehaviour
     [SerializeField] private Button retryButton;
     [SerializeField] private Button exitButton;
 
-    private void Start()
-    {
-        // For testing:
-        ShowResult(0, 66.3f, true); // Stage 1, two star 66.3f, clear
-    }
-
     public void ShowResult(int stageIndex, float clearTime, bool isClear)
     {
         gameObject.SetActive(true);
 
         stageNameText.text = $"Stage {stageIndex + 1}";
-        timeText.text = $"{clearTime:F1} sec";
+        timeText.text = $"{Mathf.FloorToInt(clearTime / 60)}:{Mathf.FloorToInt(clearTime % 60)}";
 
-        resultText.text = isClear ? "CLEAR" : "FAIL";
+        resultText.text = isClear ? "CLEAR!" : "FAIL...";
         resultText.color = isClear ? Color.yellow : Color.red;
 
         int starCount = CalculateStars(clearTime); // Temporary local calculation
@@ -68,8 +63,12 @@ public class UIStageResult : MonoBehaviour
         Debug.Log("Retry button pressed.");
     }
 
-    public void OnExitPressed()
+    public async void OnExitPressed()
     {
-        Debug.Log("Exit button pressed.");
+        var myLobby = LobbyManager.Instance.MyLobby;
+        RelayManager.Instance.Shutdown();
+        await LobbyManager.Instance.LeaveLobby(myLobby.Id);
+
+        SceneManager.LoadScene("Lobby");
     }
 }
