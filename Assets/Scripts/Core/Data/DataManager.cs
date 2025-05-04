@@ -14,6 +14,7 @@ namespace MSE.Core
         [SerializeField]
         private List<StageData> m_StageDatas;
         public static List<StageData> StageDatas;
+        public static StageData CurrStageData;
 
         private void Awake()
         {

@@ -14,7 +14,7 @@ namespace MSE.Core
         public async void OnCreateLobbyButtonPressed()
         {
             float randLobbySuffix = Random.Range(0, 1000);
-            await LobbyManager.Instance.CreateLobby($"Lobby{randLobbySuffix}", 3, 1);
+            await LobbyManager.Instance.CreateLobby($"Lobby{randLobbySuffix}", 3, DataManager.CurrStageData.Name);
 
             m_RoomGroup.gameObject.SetActive(true);
             m_RoomGroup.Config();
