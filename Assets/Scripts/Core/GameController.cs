@@ -41,7 +41,7 @@ namespace MSE.Core
 
         private void CreateBuilding()
         {
-            StageData stageData = DataManager.GetStageData(0);
+            StageData stageData = DataManager.CurrStageData;
             NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
                 networkPrefab: stageData.BuildingPrefab.GetComponent<NetworkObject>(),
                 position: m_GameMap.BuildingSpawnPoint.position,

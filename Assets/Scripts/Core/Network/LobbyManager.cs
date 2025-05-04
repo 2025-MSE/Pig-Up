@@ -34,7 +34,7 @@ namespace MSE.Core
 
         public Action OnLobbyUpdated;
 
-        public async Task<Lobby> CreateLobby(string lobbyName, int maxPlayers, int stage)
+        public async Task<Lobby> CreateLobby(string lobbyName, int maxPlayers, string stage)
         {
             CreateLobbyOptions options = new CreateLobbyOptions();
             options.IsPrivate = false;
@@ -44,7 +44,7 @@ namespace MSE.Core
                 {
                     "stage", new DataObject(
                         visibility: DataObject.VisibilityOptions.Public,
-                        value: stage.ToString(),
+                        value: stage,
                         index: DataObject.IndexOptions.S1)
                 },
                 {
@@ -113,6 +113,9 @@ namespace MSE.Core
                 };
                 Lobby joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
                 m_MyLobby = joinedLobby;
+
+                string stageName = m_MyLobby.Data["stage"].Value;
+                DataManager.CurrStageData = DataManager.GetStageData(stageName);
 
                 var callbacks = new LobbyEventCallbacks();
                 callbacks.LobbyChanged += OnLobbyChanged;

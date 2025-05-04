@@ -283,7 +283,6 @@ GameObject:
   - component: {fileID: 1862672486221856077}
   - component: {fileID: 1449329786222750056}
   - component: {fileID: 3164126103990776840}
-  - component: {fileID: 1794216379528332375}
   m_Layer: 5
   m_Name: StageButtonGroup
   m_TagString: Untagged
@@ -347,23 +346,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 801546355508423259}
   m_CullTransparentMesh: 1
---- !u!114 &1794216379528332375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 801546355508423259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bd611787cf6a4249938c028a18de81f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageButtons:
-  - {fileID: 4131138971044066580}
-  - {fileID: 7017012068106995112}
-  - {fileID: 3771299614793586012}
-  messageText: {fileID: 6286221095751252829}
 --- !u!1 &1588167156459419411
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,9 +380,9 @@ RectTransform:
   - {fileID: 7200371223105052270}
   m_Father: {fileID: 1862672486221856077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1166.6667, y: -270}
   m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5844148782726889285
@@ -485,8 +467,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1794216379528332375}
-        m_TargetAssemblyTypeName: UIGameStageSelect, Assembly-CSharp
+      - m_Target: {fileID: 5159838418175824502}
+        m_TargetAssemblyTypeName: MSE.Core.UIStoryStageSelectGroup, Assembly-CSharp
         m_MethodName: OnStageButtonPressed
         m_Mode: 3
         m_Arguments:
@@ -531,9 +513,9 @@ RectTransform:
   - {fileID: 2964798095384405517}
   m_Father: {fileID: 1862672486221856077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 233.33334, y: -270}
   m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6624995180750019277
@@ -618,8 +600,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1794216379528332375}
-        m_TargetAssemblyTypeName: UIGameStageSelect, Assembly-CSharp
+      - m_Target: {fileID: 5159838418175824502}
+        m_TargetAssemblyTypeName: MSE.Core.UIStoryStageSelectGroup, Assembly-CSharp
         m_MethodName: OnStageButtonPressed
         m_Mode: 3
         m_Arguments:
@@ -800,9 +782,9 @@ RectTransform:
   - {fileID: 6724217156691419431}
   m_Father: {fileID: 1862672486221856077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 700, y: -270}
   m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8821310604882412371
@@ -887,8 +869,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1794216379528332375}
-        m_TargetAssemblyTypeName: UIGameStageSelect, Assembly-CSharp
+      - m_Target: {fileID: 5159838418175824502}
+        m_TargetAssemblyTypeName: MSE.Core.UIStoryStageSelectGroup, Assembly-CSharp
         m_MethodName: OnStageButtonPressed
         m_Mode: 3
         m_Arguments:
@@ -1182,13 +1164,14 @@ GameObject:
   - component: {fileID: 8703071423346172438}
   - component: {fileID: 9177498247032524203}
   - component: {fileID: 4147096295616495982}
+  - component: {fileID: 5159838418175824502}
   m_Layer: 5
   m_Name: UIStageSelectPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8703071423346172438
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1249,3 +1232,16 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5159838418175824502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7411618313802940280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 964a6ce90ac8cc84bb21fe2f05de9e13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LobbyGroup: {fileID: 0}

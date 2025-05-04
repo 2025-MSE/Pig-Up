@@ -7,8 +7,11 @@ namespace MSE.Core
         [SerializeField]
         private UILobbyGroup m_LobbyGroup;
 
-        public void OnStageButtonPressed(int stage)
+        public void OnStageButtonPressed(string stageName)
         {
+            StageData stageData = DataManager.GetStageData(stageName);
+            DataManager.CurrStageData = stageData;
+
             m_LobbyGroup.gameObject.SetActive(true);
         }
     }
