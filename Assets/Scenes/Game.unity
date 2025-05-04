@@ -166,7 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   m_GameMap: {fileID: 801069517}
-  m_ResultPanelObj: {fileID: 4752085408139102062}
+  m_ResultPanel: {fileID: 4752085408139102063}
 --- !u!114 &53399326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -813,17 +813,12 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4838673032455097811, guid: 3a2da9151ae023c46901c3da41ad1737, type: 3}
   m_PrefabInstance: {fileID: 4752085408139102060}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &4752085408139102062 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 365378711516029884, guid: 3a2da9151ae023c46901c3da41ad1737, type: 3}
-  m_PrefabInstance: {fileID: 4752085408139102060}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4752085408139102063 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 434645408281494028, guid: 3a2da9151ae023c46901c3da41ad1737, type: 3}
   m_PrefabInstance: {fileID: 4752085408139102060}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4752085408139102062}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e957e2984b2c8f049a9a4971a44de11c, type: 3}

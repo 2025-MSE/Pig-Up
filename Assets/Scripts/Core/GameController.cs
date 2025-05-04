@@ -10,18 +10,20 @@ namespace MSE.Core
     {
         [SerializeField]
         private GameMap m_GameMap;
-
         private Building m_Building;
+
+        private float m_StartTime = 0f;
 
         public static Action<Building> OnBuildingSpawned;
 
         [SerializeField]
-        private GameObject m_ResultPanelObj;
+        private UIStageResult m_ResultPanel;
 
         public override void OnNetworkSpawn()
         {
             OnBuildingSpawned += OnBuildingSpawn;
-            if (!IsOwner) return;
+
+            m_StartTime = Time.time;
 
             NetworkObject nplayer = NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject;
             nplayer.transform.position = m_GameMap.PlayerSpawnPoints[0].position;
@@ -29,6 +31,12 @@ namespace MSE.Core
             GameEventCallbacks.OnBlockBuilt += OnBlockBuilt;
 
             CreateBuilding();
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            OnBuildingSpawned -= OnBuildingSpawn;
+            GameEventCallbacks.OnBlockBuilt -= OnBlockBuilt;
         }
 
         private void CreateBuilding()
@@ -130,15 +138,16 @@ namespace MSE.Core
 
             if (checkCount >= m_Building.Blocks.Count)
             {
-                CompleteStageRpc();
+                float elapsedTime = Time.time - m_StartTime;
+                CompleteStageRpc(elapsedTime);
             }
         }
 
         [Rpc(SendTo.ClientsAndHost)]
-        private void CompleteStageRpc()
+        private void CompleteStageRpc(float elapsedTime)
         {
             Cursor.lockState = CursorLockMode.None;
-            m_ResultPanelObj.SetActive(true);
+            m_ResultPanel.ShowResult(0, elapsedTime, true);
         }
     }
 }
