@@ -11,7 +11,6 @@ namespace MSE.Core
         {
             TargetSceneName = sceneName;
             SceneManager.LoadScene("LoadingScene");
-            
         }
     }
 }

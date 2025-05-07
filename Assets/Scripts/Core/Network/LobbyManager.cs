@@ -223,7 +223,7 @@ namespace MSE.Core
 
                 if (isHost)
                 {
-                    await SceneManager.LoadSceneAsync("Game");
+                    CSceneManager.LoadScene("Game");
                     NetworkManager.Singleton.StartHost();
                 } else
                 {
