@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using MSE.Core;
 
 public class LoadingController : MonoBehaviour
 {
@@ -19,36 +21,24 @@ public class LoadingController : MonoBehaviour
 
     private void Start()
     {
+        string randomLoadingMessage = loadingMessages[Random.Range(0, loadingMessages.Length)];
+        loadingText.text = randomLoadingMessage;
         StartCoroutine(LoadingRoutine());
     }
 
     IEnumerator LoadingRoutine()
     {
-        float loadProgress = 0f;
+        yield return new WaitForSeconds(0.5f);
+        AsyncOperation aop = SceneManager.LoadSceneAsync(CSceneManager.TargetSceneName);
+        aop.allowSceneActivation = false;
 
-        string randomLoadingMessage = loadingMessages[Random.Range(0, loadingMessages.Length)];
-        yield return StartCoroutine(TypeText(randomLoadingMessage));
-
-        while (loadProgress < 1f)
+        while (aop.progress < 0.9f)
         {
-            loadProgress += Time.deltaTime * 0.5f;
-            loadingBar.value = loadProgress;
+            loadingBar.value = aop.progress;
             yield return null;
         }
 
         yield return new WaitForSeconds(0.5f);
-        loadingText.text = "";
-        yield return StartCoroutine(TypeText(completeMessage));
-    }
-
-    IEnumerator TypeText(string message)
-    {
-        loadingText.text = "";
-
-        for (int i = 0; i < message.Length; i++)
-        {
-            loadingText.text += message[i];
-            yield return new WaitForSeconds(0.08f);
-        }
+        aop.allowSceneActivation = true;
     }
 }

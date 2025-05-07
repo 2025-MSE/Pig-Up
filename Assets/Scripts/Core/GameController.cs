@@ -9,6 +9,9 @@ namespace MSE.Core
     public class GameController : NetworkBehaviour
     {
         [SerializeField]
+        private NetworkObject m_PlayerPrefab;
+
+        [SerializeField]
         private GameMap m_GameMap;
         private Building m_Building;
 
@@ -25,10 +28,11 @@ namespace MSE.Core
 
             m_StartTime = Time.time;
 
-            NetworkObject nplayer = NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject;
-            nplayer.transform.position = m_GameMap.PlayerSpawnPoints[0].position;
+            SpawnPlayerRpc();
 
             GameEventCallbacks.OnBlockBuilt += OnBlockBuilt;
+
+            if (!IsServer) return;
 
             CreateBuilding();
         }
@@ -37,6 +41,13 @@ namespace MSE.Core
         {
             OnBuildingSpawned -= OnBuildingSpawn;
             GameEventCallbacks.OnBlockBuilt -= OnBlockBuilt;
+        }
+
+        [Rpc(SendTo.Server)]
+        private void SpawnPlayerRpc(RpcParams rpcParams = default)
+        {
+            NetworkObject nObject = Instantiate(m_PlayerPrefab);
+            nObject.SpawnAsPlayerObject(rpcParams.Receive.SenderClientId);
         }
 
         private void CreateBuilding()

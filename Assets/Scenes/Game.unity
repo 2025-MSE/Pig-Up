@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  m_PlayerPrefab: {fileID: 3738313018623865555, guid: 0919f5f7e7e261b4f94b977c3aa562f5, type: 3}
   m_GameMap: {fileID: 801069517}
   m_ResultPanel: {fileID: 4752085408139102063}
 --- !u!114 &53399326
