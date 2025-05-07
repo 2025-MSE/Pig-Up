@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MSE.Core
 {
-    public class GameController : NetworkBehaviour
+    public class GameController : MonoBehaviour
     {
         [SerializeField]
         private NetworkObject m_PlayerPrefab;
@@ -22,25 +22,26 @@ namespace MSE.Core
         [SerializeField]
         private UIStageResult m_ResultPanel;
 
-        public override void OnNetworkSpawn()
+        private void OnEnable()
         {
             OnBuildingSpawned += OnBuildingSpawn;
-
-            m_StartTime = Time.time;
-
-            SpawnPlayerRpc();
-
             GameEventCallbacks.OnBlockBuilt += OnBlockBuilt;
-
-            if (!IsServer) return;
-
-            CreateBuilding();
         }
 
-        public override void OnNetworkDespawn()
+        private void OnDisable()
         {
             OnBuildingSpawned -= OnBuildingSpawn;
             GameEventCallbacks.OnBlockBuilt -= OnBlockBuilt;
+        }
+
+        private void Start()
+        {
+            SpawnPlayerRpc();
+
+            if (!NetworkManager.Singleton.IsServer) return;
+
+            m_StartTime = Time.time;
+            CreateBuilding();
         }
 
         [Rpc(SendTo.Server)]
