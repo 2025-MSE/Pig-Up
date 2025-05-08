@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -30,12 +33,12 @@ namespace MSE.Core
 
         public void OnSignupPressed()
         {
-            StartCoroutine(Signup());
+            SignupAsync();
         }
 
-        public IEnumerator Signup()
+        public async void SignupAsync()
         {
-            if (m_Signupping) yield break;
+            if (m_Signupping) return;
 
             m_Signupping = true;
 
@@ -43,18 +46,14 @@ namespace MSE.Core
             string password = m_PwdField.text;
             string playername = m_PlayerNameField.text;
 
-            bool succeeded = false;
-            yield return StartCoroutine(AuthManager.Instance.SignUpCoroutine(username, password, playername, (success) => {
-                succeeded = success;
-            }));
-
-            if (succeeded)
+            try
             {
+                await AuthManager.Instance.SignupAsync(username, password, playername);
                 SceneManager.LoadScene("Lobby");
             }
-            else
+            catch (Exception ex)
             {
-                Debug.Log("Signup error");
+                Debug.LogException(ex);
             }
 
             m_Signupping = false;
@@ -82,7 +81,7 @@ namespace MSE.Core
         {
             if (context.started)
             {
-                StartCoroutine(Signup());
+                SignupAsync();
             }
         }
     }

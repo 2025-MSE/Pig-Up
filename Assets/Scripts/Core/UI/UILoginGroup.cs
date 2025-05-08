@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace MSE.Core
 
         public void OnLoginPressed()
         {
-            StartCoroutine(Login());
+            LoginAsync();
         }
 
         public void OnSignupPressed()
@@ -29,27 +30,23 @@ namespace MSE.Core
             m_SignupGroup.gameObject.SetActive(true);
         }
 
-        public IEnumerator Login()
+        public async void LoginAsync()
         {
-            if (m_Loginning) yield break;
+            if (m_Loginning) return;
 
             m_Loginning = true;
 
             string username = m_UsernameField.text;
             string password = m_PwdField.text;
             
-            bool succeeded = false;
-            yield return StartCoroutine(AuthManager.Instance.LoginCoroutine(username, password, (success) => {
-                succeeded = success;
-            }));
-
-            if (succeeded)
+            try
             {
+                await AuthManager.Instance.LoginAsync(username, password);
                 SceneManager.LoadScene("Lobby");
-            }
-            else
+            } 
+            catch (Exception ex)
             {
-                Debug.Log("Login Error");
+                Debug.LogException(ex);
             }
 
             m_Loginning = false;
@@ -77,7 +74,7 @@ namespace MSE.Core
         {
             if (context.started)
             {
-                StartCoroutine(Login());
+                LoginAsync();
             }
         }
     }

@@ -1,12 +1,7 @@
-using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace MSE.Core
 {
@@ -22,40 +17,33 @@ namespace MSE.Core
             }
         }
 
-        public IEnumerator SignUpCoroutine(string username, string password, string playername, Action<bool> callback)
+        public async Task SignupAsync(string username, string password, string playername)
         {
-            Task signUpTask = AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
-            yield return new WaitUntil(() => signUpTask.IsCompleted);
-
-            if (signUpTask.Exception != null)
+            try
             {
-                Debug.LogException(signUpTask.Exception);
-                callback?.Invoke(false);
-                yield break;
+                await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
+                await AuthenticationService.Instance.UpdatePlayerNameAsync(playername);
+                await API.UpdateUserIdAsync(AuthenticationService.Instance.PlayerId);
             }
-
-            Task updatePlayerNameTask = AuthenticationService.Instance.UpdatePlayerNameAsync(playername);
-            yield return new WaitUntil(() => updatePlayerNameTask.IsCompleted);
-
-            callback?.Invoke(true);
+            catch (Exception ex)
+            {
+                AuthenticationService.Instance.SignOut();
+                throw ex;
+            }
         }
 
-        public IEnumerator LoginCoroutine(string username, string password, Action<bool> callback)
+        public async Task LoginAsync(string username, string password)
         {
-            Task loginTask = AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
-            yield return new WaitUntil(() => loginTask.IsCompleted);
-
-            if (loginTask.Exception != null)
+            try
             {
-                Debug.LogException(loginTask.Exception);
-                callback?.Invoke(false);
-                yield break;
+                await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
+                await API.UpdateUserIdAsync(AuthenticationService.Instance.PlayerId);
             }
-
-            Task updatePlayerNameTask = AuthenticationService.Instance.UpdatePlayerNameAsync(username);
-            yield return new WaitUntil(() => updatePlayerNameTask.IsCompleted);
-
-            callback?.Invoke(true);
+            catch (Exception ex)
+            {
+                AuthenticationService.Instance.SignOut();
+                throw ex;
+            }
         }
     }
 }
