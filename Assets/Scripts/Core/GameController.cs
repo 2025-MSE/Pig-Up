@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using UnityEngine;
 
 namespace MSE.Core
@@ -156,10 +157,20 @@ namespace MSE.Core
         }
 
         [Rpc(SendTo.ClientsAndHost)]
-        private void CompleteStageRpc(float elapsedTime)
+        private async void CompleteStageRpc(float elapsedTime)
         {
             Cursor.lockState = CursorLockMode.None;
             m_ResultPanel.ShowResult(0, elapsedTime, true);
+
+            try
+            {
+                await API.SaveStageClearData(AuthenticationService.Instance.PlayerId, DataManager.CurrStageData.Name, (long)elapsedTime);
+                Debug.Log("Successfully saved stage clear data!");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+            }
         }
     }
 }
