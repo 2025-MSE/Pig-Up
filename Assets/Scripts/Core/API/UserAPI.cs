@@ -1,6 +1,7 @@
 using NUnit.Framework.Constraints;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,6 +12,15 @@ namespace MSE.Core
     public class User
     {
         public string unityUserId;
+        public UserStageClearData[] stageClearInfos;
+    }
+
+    [Serializable]
+    public class UserStageClearData
+    {
+        public long id;
+        public string stageName;
+        public long clearTime;
     }
 
     [Serializable]
@@ -29,7 +39,7 @@ namespace MSE.Core
         private readonly static string BASE_URL = "https://example.url.com"; // Need to modify when we publish this application.
 #endif
 
-        public static async Task UpdateUserIdAsync(string id)
+        public static async Task<User> UpdateUserIdAsync(string id)
         {
             User user = new User();
             user.unityUserId = id;
@@ -44,6 +54,11 @@ namespace MSE.Core
                 {
                     throw new Exception(webRequest.error);
                 }
+
+                string resultJson = webRequest.downloadHandler.text;
+                User userData = JsonUtility.FromJson<User>(resultJson);
+
+                return userData;
             }
             catch (Exception ex)
             {
@@ -51,7 +66,7 @@ namespace MSE.Core
             }
         }
 
-        public static IEnumerator SaveStageClearData(string userId, string stageName, long clearTime)
+        public static async Task SaveStageClearData(string userId, string stageName, long clearTime)
         {
             StageClearData stageClearData = new StageClearData();
             stageClearData.unityUserId = userId;
@@ -59,13 +74,19 @@ namespace MSE.Core
             stageClearData.clearTime = clearTime;
             string clearDataJson = JsonUtility.ToJson(stageClearData);
 
-            UnityWebRequest webRequest = UnityWebRequest.Post($"{BASE_URL}/api/users/stage-clear", clearDataJson, "application/json");
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            try
             {
-                Debug.LogError($"SaveStageClearData Error: {webRequest.error}");
-                throw new Exception(webRequest.error);
+                UnityWebRequest webRequest = UnityWebRequest.Post($"{BASE_URL}/api/users/stage-clear", clearDataJson, "application/json");
+                await webRequest.SendWebRequest();
+
+                if (webRequest.error != null)
+                {
+                    throw new Exception(webRequest.error);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

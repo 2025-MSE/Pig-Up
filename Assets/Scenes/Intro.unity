@@ -5070,6 +5070,8 @@ MonoBehaviour:
   m_BlockData: {fileID: 11400000, guid: 8fda88df21b1f8148b16c2dbc793f741, type: 2}
   m_StageDatas:
   - {fileID: 11400000, guid: a45af3d33a600954899f94d6ef26c3c4, type: 2}
+  - {fileID: 11400000, guid: 5ac9f17d77edeb54491667daeedc439b, type: 2}
+  - {fileID: 11400000, guid: 7b74ba2548f7a124bb74e1592fd6ffd6, type: 2}
 --- !u!4 &2114502385
 Transform:
   m_ObjectHideFlags: 0
