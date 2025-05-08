@@ -158,7 +158,7 @@ namespace MSE.Core
             }
         }
 
-        public async Task<List<Lobby>> QueryLobby(int stage)
+        public async Task<List<Lobby>> QueryLobby(string stage)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace MSE.Core
                     new QueryFilter(
                         field: QueryFilter.FieldOptions.S1,
                         op: QueryFilter.OpOptions.EQ,
-                        value: stage.ToString())
+                        value: stage)
                 };
 
                 options.Order = new List<QueryOrder>()

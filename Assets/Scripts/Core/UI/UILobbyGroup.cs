@@ -40,7 +40,7 @@ namespace MSE.Core
                 Destroy(childTrans.gameObject);
             }
 
-            var queriedLobbies = await LobbyManager.Instance.QueryLobby(1);
+            var queriedLobbies = await LobbyManager.Instance.QueryLobby("1");
             foreach (Lobby lobby in queriedLobbies)
             {
                 UILobbyCell newLobbyCell = Instantiate(m_LobbyCellPrefab);
