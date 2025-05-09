@@ -63,8 +63,7 @@ namespace MSE.Core
         /// <summary>
         /// Invoked when the block is spawned with partition.
         /// </summary>
-        [Rpc(SendTo.ClientsAndHost)]
-        public void ConfigPartitionRpc()
+        public void ConfigPartition()
         {
             m_Boundary.SetBoundaryActive(false);
             m_Detection.gameObject.SetActive(false);

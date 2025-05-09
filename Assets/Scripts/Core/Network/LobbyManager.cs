@@ -223,8 +223,8 @@ namespace MSE.Core
 
                 if (isHost)
                 {
-                    CSceneManager.LoadScene("Game");
                     NetworkManager.Singleton.StartHost();
+                    NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
                 } else
                 {
                     await RelayManager.Instance.StartClient(m_MyLobby.Data["joinCode"].Value);

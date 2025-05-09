@@ -16,6 +16,12 @@ namespace MSE.Core
         {
             m_Blocks = m_BlockRoot.GetComponentsInChildren<Block>().ToList();
             GameController.OnBuildingSpawned?.Invoke(this);
+            for (int i = 0; i < Blocks.Count; i++)
+            {
+                Block block = Blocks[i];
+                block.ConfigBuildingRpc();
+                block.BuiltIndex = i;
+            }
         }
     }
 }

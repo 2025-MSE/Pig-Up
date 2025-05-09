@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MSE.Core
 {
-    public class GameController : MonoBehaviour
+    public class GameController : NetworkBehaviour
     {
         [SerializeField]
         private NetworkObject m_PlayerPrefab;
@@ -23,26 +23,26 @@ namespace MSE.Core
         [SerializeField]
         private UIStageResult m_ResultPanel;
 
-        private void OnEnable()
-        {
-            OnBuildingSpawned += OnBuildingSpawn;
-            GameEventCallbacks.OnBlockBuilt += OnBlockBuilt;
-        }
-
-        private void OnDisable()
-        {
-            OnBuildingSpawned -= OnBuildingSpawn;
-            GameEventCallbacks.OnBlockBuilt -= OnBlockBuilt;
-        }
-
-        private void Start()
+        public override void OnNetworkSpawn()
         {
             SpawnPlayerRpc();
+            OnBuildingSpawned += OnBuildingSpawn;
 
-            if (!NetworkManager.Singleton.IsServer) return;
+            if (!IsServer) return;
+
+            GameEventCallbacks.OnBlockBuilt += OnBlockBuilt;
 
             m_StartTime = Time.time;
             CreateBuilding();
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            OnBuildingSpawned -= OnBuildingSpawn;
+
+            if (!IsServer) return;
+
+            GameEventCallbacks.OnBlockBuilt -= OnBlockBuilt;
         }
 
         [Rpc(SendTo.Server)]
@@ -64,17 +64,10 @@ namespace MSE.Core
         private void OnBuildingSpawn(Building building)
         {
             m_Building = building;
-            for (int i = 0; i < m_Building.Blocks.Count; i++)
-            {
-                Block block = m_Building.Blocks[i];
-                block.ConfigBuildingRpc();
-                block.BuiltIndex = i;
-            }
 
             SpawnPartitionBlocksRpc();
         }
 
-        [Rpc(SendTo.Server)]
         private void SpawnPartitionBlocksRpc()
         {
             SortedSet<int> spawnedBlockIndice = new SortedSet<int>();
@@ -94,15 +87,16 @@ namespace MSE.Core
             foreach (int sbIndex in spawnedBlockIndice)
             {
                 Transform spawnpoint = m_GameMap.PBlockSpawnPoints[spIndice[index]];
-                NetworkObject npbobj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
-                    networkPrefab: DataManager.GetBlock(sbIndex).GetComponent<NetworkObject>(),
-                    position: spawnpoint.position,
-                    rotation: spawnpoint.rotation);
-                Block pblock = npbobj.GetComponent<Block>();
-                pblock.ConfigPartitionRpc();
+                SpawnPBlockRpc(sbIndex, spawnpoint.position, spawnpoint.rotation);
 
                 index += 1;
             }
+        }
+
+        private void SpawnPBlockRpc(int sbIndex, Vector3 position, Quaternion rotation, RpcParams rpcParams = default)
+        {
+            Block pBlock = Instantiate(DataManager.GetBlock(sbIndex), position, rotation);
+            pBlock.ConfigPartition();
         }
 
         private void OnBlockBuilt(Block block, int[] builtIndice)
@@ -127,6 +121,8 @@ namespace MSE.Core
         [Rpc(SendTo.ClientsAndHost)]
         private void AdjustBlockRpc(ulong netBlockId, int builtIndex)
         {
+            Debug.Log($"AdjustBlockRpc: {netBlockId}, {builtIndex}");
+
             var nobj = NetworkManager.Singleton.SpawnManager.SpawnedObjects[netBlockId];
             var nblock = nobj.GetComponent<Block>();
             var tblock = m_Building.Blocks[builtIndex];
@@ -157,14 +153,14 @@ namespace MSE.Core
         }
 
         [Rpc(SendTo.ClientsAndHost)]
-        private async void CompleteStageRpc(float elapsedTime)
+        private void CompleteStageRpc(float elapsedTime)
         {
             Cursor.lockState = CursorLockMode.None;
             m_ResultPanel.ShowResult(0, elapsedTime, true);
 
             try
             {
-                await API.SaveStageClearData(AuthenticationService.Instance.PlayerId, DataManager.CurrStageData.Name, (long)elapsedTime);
+                API.SaveStageClearData(AuthenticationService.Instance.PlayerId, DataManager.CurrStageData.Name, (long)elapsedTime);
                 Debug.Log("Successfully saved stage clear data!");
             }
             catch (Exception ex)
