@@ -18,15 +18,12 @@ namespace MSE.Core
 
         private float m_StartTime = 0f;
 
-        public static Action<Building> OnBuildingSpawned;
-
         [SerializeField]
         private UIStageResult m_ResultPanel;
 
         public override void OnNetworkSpawn()
         {
             SpawnPlayerRpc();
-            OnBuildingSpawned += OnBuildingSpawn;
 
             if (!IsServer) return;
 
@@ -34,15 +31,22 @@ namespace MSE.Core
 
             m_StartTime = Time.time;
             CreateBuilding();
+            Building.OnSpawned += OnBuildingSpawned;
         }
 
         public override void OnNetworkDespawn()
         {
-            OnBuildingSpawned -= OnBuildingSpawn;
-
             if (!IsServer) return;
 
             GameEventCallbacks.OnBlockBuilt -= OnBlockBuilt;
+        }
+
+        private void OnBuildingSpawned(Building building)
+        {
+            Building.OnSpawned -= OnBuildingSpawned;
+
+            m_Building = building;
+            SpawnInFieldBlocks();
         }
 
         [Rpc(SendTo.Server)]
@@ -56,19 +60,12 @@ namespace MSE.Core
         {
             StageData stageData = DataManager.CurrStageData;
             NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
-                networkPrefab: stageData.BuildingPrefab.GetComponent<NetworkObject>(),
+                stageData.BuildingPrefab.GetComponent<NetworkObject>(),
                 position: m_GameMap.BuildingSpawnPoint.position,
                 rotation: Quaternion.identity);
         }
 
-        private void OnBuildingSpawn(Building building)
-        {
-            m_Building = building;
-
-            SpawnPartitionBlocksRpc();
-        }
-
-        private void SpawnPartitionBlocksRpc()
+        private void SpawnInFieldBlocks()
         {
             SortedSet<int> spawnedBlockIndice = new SortedSet<int>();
             foreach (Block block in m_Building.Blocks)
@@ -87,16 +84,20 @@ namespace MSE.Core
             foreach (int sbIndex in spawnedBlockIndice)
             {
                 Transform spawnpoint = m_GameMap.PBlockSpawnPoints[spIndice[index]];
-                SpawnPBlockRpc(sbIndex, spawnpoint.position, spawnpoint.rotation);
+                SpawnInFieldBlock(sbIndex, spawnpoint.position, spawnpoint.rotation);
 
                 index += 1;
             }
         }
 
-        private void SpawnPBlockRpc(int sbIndex, Vector3 position, Quaternion rotation, RpcParams rpcParams = default)
+        private void SpawnInFieldBlock(int sbIndex, Vector3 position, Quaternion rotation, RpcParams rpcParams = default)
         {
-            Block pBlock = Instantiate(DataManager.GetBlock(sbIndex), position, rotation);
-            pBlock.ConfigPartition();
+            NetworkObject nBlockObj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
+                DataManager.GetBlock(sbIndex).GetComponent<NetworkObject>(),
+                position: position,
+                rotation: rotation);
+            Block block = nBlockObj.GetComponent<Block>();
+            block.SetStrategy(BlockStrategyType.IN_FIELD);
         }
 
         private void OnBlockBuilt(Block block, int[] builtIndice)
@@ -114,7 +115,7 @@ namespace MSE.Core
 
             if (builtIndice.Length > 0)
             {
-                AdjustBlockRpc(netBlockId, builtBlocks[0].BuiltIndex);
+                AdjustBlockRpc(netBlockId, builtBlocks[0].InBuildingIndex);
             }
         }
 

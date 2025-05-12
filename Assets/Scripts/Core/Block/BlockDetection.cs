@@ -19,11 +19,13 @@ namespace MSE.Core
         {
             if (other.transform.parent.TryGetComponent(out Block block))
             {
-                if (block.Index != m_Block.Index) return;
-                if (block.BuiltIndex == -1) return;
-                if (m_DetectedBuiltIndice.Contains(block.BuiltIndex)) return;
+                Debug.Log($"BlockDetection::OnTriggerEnter::InBuildingIndex {block.InBuildingIndex}");
+                Debug.Log($"BlockDetection::OnTriggerEnter::StrategyType {block.StrategyType.ToString()}");
 
-                m_DetectedBuiltIndice.Add(block.BuiltIndex);
+                if (block.StrategyType != BlockStrategyType.IN_BUILDING) return;
+                if (block.Index != m_Block.Index) return;
+
+                m_DetectedBuiltIndice.Add(block.InBuildingIndex);
             }
         }
 
@@ -31,9 +33,10 @@ namespace MSE.Core
         {
             if (other.transform.parent.TryGetComponent(out Block block))
             {
+                if (block.StrategyType != BlockStrategyType.IN_BUILDING) return;
                 if (block.Index != m_Block.Index) return;
 
-                m_DetectedBuiltIndice.Remove(block.BuiltIndex);
+                m_DetectedBuiltIndice.Remove(block.InBuildingIndex);
             }
         }
     }
