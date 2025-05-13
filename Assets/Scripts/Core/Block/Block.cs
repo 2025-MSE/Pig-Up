@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -53,7 +54,6 @@ namespace MSE.Core
         {
             if (IsServer)
             {
-
             }
 
             m_InBuildingIndex.OnValueChanged += OnInBuildingIndexChanged;
@@ -90,6 +90,7 @@ namespace MSE.Core
 
         private void UpdateStrategy()
         {
+            Debug.Log($"Updated Strategy: {m_StrategyType.Value.ToString()}");
             switch (m_StrategyType.Value)
             {
                 case BlockStrategyType.READY_TO_BUILD:

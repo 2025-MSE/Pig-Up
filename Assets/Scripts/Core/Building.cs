@@ -6,38 +6,31 @@ using UnityEngine;
 
 namespace MSE.Core
 {
-    public class Building : NetworkBehaviour
+    public class Building : MonoBehaviour
     {
         [SerializeField]
         private Transform m_BlockRoot;
         private List<Block> m_Blocks = new List<Block>();
         public List<Block> Blocks => m_Blocks;
 
-        public static Action<Building> OnSpawned;
-
-        public override void OnNetworkSpawn()
+        void Awake()
         {
-            if (!IsServer) return;
+            m_Blocks = m_BlockRoot.GetComponentsInChildren<Block>().ToList();
+        }
 
-            for (int i = 0; i < m_BlockRoot.childCount; i++)
+        public void AssignBuilding()
+        {
+            for (int i = 0; i < m_Blocks.Count; i++)
             {
-                Block block = m_BlockRoot.GetChild(i).GetComponent<Block>();
-                int blockIndex = block.Index;
+                Block block = m_Blocks[i];
+                NetworkObject nBlockObj = block.GetComponent<NetworkObject>();
 
-                NetworkObject nBlockObj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
-                    DataManager.GetBlock(blockIndex).GetComponent<NetworkObject>(),
-                    position: block.transform.position,
-                    rotation: block.transform.rotation);
-                Block nBlock = nBlockObj.GetComponent<Block>();
-                nBlock.SetStrategy(BlockStrategyType.IN_BUILDING);
-                nBlock.SetInBuildingIndex(i);
+                nBlockObj.TrySetParent(m_BlockRoot);
+                nBlockObj.Spawn();
 
-                m_Blocks.Add(nBlock);
-
-                Destroy(block.gameObject);
+                block.SetStrategy(BlockStrategyType.IN_BUILDING);
+                block.SetInBuildingIndex(i);
             }
-
-            OnSpawned?.Invoke(this);
         }
     }
 }
