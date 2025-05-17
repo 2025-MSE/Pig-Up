@@ -55,6 +55,7 @@ namespace MSE.Core
             if (IsServer)
             {
             }
+            UpdateStrategy();
 
             m_InBuildingIndex.OnValueChanged += OnInBuildingIndexChanged;
             m_StrategyType.OnValueChanged += OnStrategyChanged;

@@ -1,5 +1,6 @@
-using System.Numerics;
+using UnityEngine;
 
+[System.Serializable]
 public class BuildingParsedData
 {
     public int BlockIndex;

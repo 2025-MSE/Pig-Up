@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -8,28 +7,31 @@ namespace MSE.Core
 {
     public class Building : MonoBehaviour
     {
+        public BuildingParsedData[] ParsedDatas;
+
         [SerializeField]
         private Transform m_BlockRoot;
         private List<Block> m_Blocks = new List<Block>();
         public List<Block> Blocks => m_Blocks;
 
-        void Awake()
-        {
-            m_Blocks = m_BlockRoot.GetComponentsInChildren<Block>().ToList();
-        }
-
         public void AssignBuilding()
         {
-            for (int i = 0; i < m_Blocks.Count; i++)
+            for (int i = 0; i < ParsedDatas.Length; i++)
             {
-                Block block = m_Blocks[i];
-                NetworkObject nBlockObj = block.GetComponent<NetworkObject>();
+                BuildingParsedData data = ParsedDatas[i];
+
+                Block blockPrefab = DataManager.GetBlock(data.BlockIndex);
+
+                NetworkObject nBlockObj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(blockPrefab.GetComponent<NetworkObject>(),
+                    position: data.Position,
+                    rotation: data.Rotation);
+                Block block = nBlockObj.GetComponent<Block>();
 
                 nBlockObj.TrySetParent(m_BlockRoot);
-                nBlockObj.Spawn();
-
                 block.SetStrategy(BlockStrategyType.IN_BUILDING);
                 block.SetInBuildingIndex(i);
+
+                m_Blocks.Add(block);
             }
         }
     }

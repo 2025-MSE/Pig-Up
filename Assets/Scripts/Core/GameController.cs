@@ -50,7 +50,11 @@ namespace MSE.Core
         private void CreateBuilding()
         {
             StageData stageData = DataManager.CurrStageData;
-            m_Building = Instantiate(stageData.BuildingPrefab, Vector3.zero, Quaternion.identity);
+            NetworkObject nBuildingObj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
+                stageData.BuildingPrefab.GetComponent<NetworkObject>(),
+                position: m_GameMap.BuildingSpawnPoint.position,
+                rotation: Quaternion.identity);
+            m_Building = nBuildingObj.GetComponent<Building>();
             m_Building.AssignBuilding();
 
             SpawnInFieldBlocks();

@@ -12,6 +12,7 @@ namespace MSE.Core
             m_Block.Detection.gameObject.SetActive(false);
             m_Block.DetecteeObj.SetActive(false);
             m_Block.SelectionObj.SetActive(true);
+            m_Block.Renderer.SetTransparency(1f);
         }
     }
 }

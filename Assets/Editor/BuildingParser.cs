@@ -35,18 +35,54 @@ public class BuildingParser : EditorWindow
                 "Cancel");
             if (confirmed)
             {
-                Parse();
+                List<BuildingParsedData> parsedData = Parse();
+                m_BuildingPrefab.ParsedDatas = parsedData.ToArray();
+
+                EditorUtility.SetDirty(m_BuildingPrefab);
+
+                if (!Application.isPlaying)
+                {
+                    AssetDatabase.SaveAssets();
+                }
             }
         }
+        if (GUILayout.Button("Generate"))
+        {
+            bool confirmed = EditorUtility.DisplayDialog(
+                "Generate Alert",
+                $"You are trying to generate building::{m_BuildingPrefab.name}",
+                "Confirm",
+                "Cancel");
+            if (confirmed)
+            {
+                BuildingParsedData[] parsedData = m_BuildingPrefab.ParsedDatas;
+
+                EditorUtility.SetDirty(m_BuildingPrefab);
+
+                if (!Application.isPlaying)
+                {
+                    AssetDatabase.SaveAssets();
+                }
+            }
+        }
+
+        GUILayout.EndHorizontal();
     }
 
-    private void Parse()
+    private List<BuildingParsedData> Parse()
     {
         List<BuildingParsedData> parsedDatas = new List<BuildingParsedData>();
 
         foreach (Transform trans in m_BuildingPrefab.transform.GetChild(0).transform)
         {
-            
+            BuildingParsedData data = new BuildingParsedData();
+            data.BlockIndex = trans.GetComponent<Block>().Index;
+            data.Position = trans.position;
+            data.Rotation = trans.rotation;
+
+            parsedDatas.Add(data);
         }
+
+        return parsedDatas;
     }
 }
