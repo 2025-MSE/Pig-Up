@@ -2,6 +2,7 @@ using MSE.Core;
 using System.Collections;
 using System.IO;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEditor;
 using UnityEngine;
 using WebSocketSharp;
@@ -122,6 +123,8 @@ public class BlockConverter : EditorWindow
         nobj.DontDestroyWithOwner = true;
         Block blockComp = blockPrefObj.AddComponent<Block>();
         blockComp.Index = index;
+
+        blockPrefObj.AddComponent<NetworkTransform>();
 
         GameObject boundaryObj = new GameObject("Boundary");
         boundaryObj.transform.SetParent(blockPrefObj.transform);

@@ -18,15 +18,12 @@ namespace MSE.Core
 
         private float m_StartTime = 0f;
 
-        public static Action<Building> OnBuildingSpawned;
-
         [SerializeField]
         private UIStageResult m_ResultPanel;
 
         public override void OnNetworkSpawn()
         {
             SpawnPlayerRpc();
-            OnBuildingSpawned += OnBuildingSpawn;
 
             if (!IsServer) return;
 
@@ -38,8 +35,6 @@ namespace MSE.Core
 
         public override void OnNetworkDespawn()
         {
-            OnBuildingSpawned -= OnBuildingSpawn;
-
             if (!IsServer) return;
 
             GameEventCallbacks.OnBlockBuilt -= OnBlockBuilt;
@@ -55,20 +50,17 @@ namespace MSE.Core
         private void CreateBuilding()
         {
             StageData stageData = DataManager.CurrStageData;
-            NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
-                networkPrefab: stageData.BuildingPrefab.GetComponent<NetworkObject>(),
+            NetworkObject nBuildingObj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
+                stageData.BuildingPrefab.GetComponent<NetworkObject>(),
                 position: m_GameMap.BuildingSpawnPoint.position,
                 rotation: Quaternion.identity);
+            m_Building = nBuildingObj.GetComponent<Building>();
+            m_Building.AssignBuilding();
+
+            SpawnInFieldBlocks();
         }
 
-        private void OnBuildingSpawn(Building building)
-        {
-            m_Building = building;
-
-            SpawnPartitionBlocksRpc();
-        }
-
-        private void SpawnPartitionBlocksRpc()
+        private void SpawnInFieldBlocks()
         {
             SortedSet<int> spawnedBlockIndice = new SortedSet<int>();
             foreach (Block block in m_Building.Blocks)
@@ -87,16 +79,20 @@ namespace MSE.Core
             foreach (int sbIndex in spawnedBlockIndice)
             {
                 Transform spawnpoint = m_GameMap.PBlockSpawnPoints[spIndice[index]];
-                SpawnPBlockRpc(sbIndex, spawnpoint.position, spawnpoint.rotation);
+                SpawnInFieldBlock(sbIndex, spawnpoint.position, spawnpoint.rotation);
 
                 index += 1;
             }
         }
 
-        private void SpawnPBlockRpc(int sbIndex, Vector3 position, Quaternion rotation, RpcParams rpcParams = default)
+        private void SpawnInFieldBlock(int sbIndex, Vector3 position, Quaternion rotation, RpcParams rpcParams = default)
         {
-            Block pBlock = Instantiate(DataManager.GetBlock(sbIndex), position, rotation);
-            pBlock.ConfigPartition();
+            NetworkObject nBlockObj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
+                DataManager.GetBlock(sbIndex).GetComponent<NetworkObject>(),
+                position: position,
+                rotation: rotation);
+            Block block = nBlockObj.GetComponent<Block>();
+            block.SetStrategy(BlockStrategyType.IN_FIELD);
         }
 
         private void OnBlockBuilt(Block block, int[] builtIndice)
@@ -114,24 +110,20 @@ namespace MSE.Core
 
             if (builtIndice.Length > 0)
             {
-                AdjustBlockRpc(netBlockId, builtBlocks[0].BuiltIndex);
+                block.SetChecked(true);
+                builtBlocks[0].SetChecked(true);
+                AdjustBlockRpc(netBlockId, builtBlocks[0].transform.position, builtBlocks[0].transform.eulerAngles);
             }
         }
 
         [Rpc(SendTo.ClientsAndHost)]
-        private void AdjustBlockRpc(ulong netBlockId, int builtIndex)
+        private void AdjustBlockRpc(ulong netBlockId, Vector3 position, Vector3 eulerAngles)
         {
-            Debug.Log($"AdjustBlockRpc: {netBlockId}, {builtIndex}");
-
             var nobj = NetworkManager.Singleton.SpawnManager.SpawnedObjects[netBlockId];
-            var nblock = nobj.GetComponent<Block>();
-            var tblock = m_Building.Blocks[builtIndex];
 
-            nobj.transform.DOMove(tblock.transform.position, 0.5f);
-            nobj.transform.DORotate(tblock.transform.rotation.eulerAngles, 0.5f);
+            nobj.transform.DOMove(position, 0.5f);
+            nobj.transform.DORotate(eulerAngles, 0.5f);
 
-            nblock.SetChecked(true);
-            tblock.SetChecked(true);
             CheckBuildingRpc();
         }
 
