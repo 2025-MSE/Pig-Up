@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Stage3
   m_EditorClassIdentifier: 
   Name: 3
-  BuildingPrefab: {fileID: 1184265490490966412, guid: 7caaa3b231c6d0341afa33f9bc0b32ef, type: 3}
+  BuildingPrefab: {fileID: 9034487779758389692, guid: c16e7d7e5ff72bb4f93918deb98f4b73, type: 3}
