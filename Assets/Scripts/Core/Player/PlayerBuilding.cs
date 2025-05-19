@@ -129,6 +129,7 @@ namespace MSE.Core
                 ownerClientId: rpcParams.Receive.SenderClientId,
                 position: pos,
                 rotation: rot);
+            nobj.DontDestroyWithOwner = true;
             Block block = nobj.GetComponent<Block>();
             block.SetStrategy(BlockStrategyType.BUILT_BY_PLAYER);
             GameEventCallbacks.OnBlockBuilt?.Invoke(block, builtIndice);

@@ -25,6 +25,7 @@ namespace MSE.Core
                 NetworkObject nBlockObj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(blockPrefab.GetComponent<NetworkObject>(),
                     position: data.Position,
                     rotation: data.Rotation);
+                nBlockObj.DontDestroyWithOwner = true;
                 Block block = nBlockObj.GetComponent<Block>();
 
                 nBlockObj.TrySetParent(m_BlockRoot);

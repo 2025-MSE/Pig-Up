@@ -39,7 +39,7 @@ namespace MSE.Core
         private BlockRenderer m_Renderer;
         public BlockRenderer Renderer => m_Renderer;
 
-        private bool m_Checked = false;
+        private NetworkVariable<bool> m_Checked = new NetworkVariable<bool>();
 
         private void Awake()
         {
@@ -59,6 +59,7 @@ namespace MSE.Core
 
             m_InBuildingIndex.OnValueChanged += OnInBuildingIndexChanged;
             m_StrategyType.OnValueChanged += OnStrategyChanged;
+            m_Checked.OnValueChanged += OnCheckedChanged;
         }
 
         private void OnInBuildingIndexChanged(int prevIndex, int currIndex)
@@ -91,7 +92,6 @@ namespace MSE.Core
 
         private void UpdateStrategy()
         {
-            Debug.Log($"Updated Strategy: {m_StrategyType.Value.ToString()}");
             switch (m_StrategyType.Value)
             {
                 case BlockStrategyType.READY_TO_BUILD:
@@ -119,12 +119,16 @@ namespace MSE.Core
         /// <param name="isChecked"></param>
         public void SetChecked(bool isChecked)
         {
-            m_Checked = isChecked;
+            m_Checked.Value = isChecked;
             m_DetecteeObj.SetActive(false);
+        }
+        private void OnCheckedChanged(bool prevChecked, bool currChecked)
+        {
+            m_DetecteeObj.SetActive(!currChecked);
         }
         public bool IsChecked()
         {
-            return m_Checked;
+            return m_Checked.Value;
         }
     }
 }

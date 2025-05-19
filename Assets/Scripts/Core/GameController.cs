@@ -111,6 +111,7 @@ namespace MSE.Core
             if (builtIndice.Length > 0)
             {
                 block.SetChecked(true);
+                block.SetStrategy(BlockStrategyType.CHECKED);
                 builtBlocks[0].SetChecked(true);
                 AdjustBlockRpc(netBlockId, builtBlocks[0].transform.position, builtBlocks[0].transform.eulerAngles);
             }

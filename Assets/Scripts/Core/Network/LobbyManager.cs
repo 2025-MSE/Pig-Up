@@ -32,64 +32,35 @@ namespace MSE.Core
         private Lobby m_MyLobby = null;
         public Lobby MyLobby => m_MyLobby;
 
+        private ILobbyEvents m_LobbyEvents = null;
+
         public Action OnLobbyUpdated;
+
+        private bool m_Started = false;
 
         public async Task<Lobby> CreateLobby(string lobbyName, int maxPlayers, string stage)
         {
             CreateLobbyOptions options = new CreateLobbyOptions();
             options.IsPrivate = false;
             options.IsLocked = false;
-            options.Data = new Dictionary<string, DataObject>()
-            {
-                {
-                    "stage", new DataObject(
-                        visibility: DataObject.VisibilityOptions.Public,
-                        value: stage,
-                        index: DataObject.IndexOptions.S1)
-                },
-                {
-                    "started", new DataObject(
-                        visibility: DataObject.VisibilityOptions.Public,
-                        value: "false")
-                }
-            };
+            options.Data = CreateLobbyDataObject(stage);
 
             Lobby newLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
             m_Lobbies.Add(newLobby);
 
             var callbacks = new LobbyEventCallbacks();
             callbacks.LobbyChanged += OnLobbyChanged;
-            await LobbyService.Instance.SubscribeToLobbyEventsAsync(newLobby.Id, callbacks);
+            m_LobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(newLobby.Id, callbacks);
 
             m_MyLobby = newLobby;
 
             UpdatePlayerOptions upOptions = new UpdatePlayerOptions();
-            upOptions.Data = new Dictionary<string, PlayerDataObject>()
-            {
-                {
-                    "name", new PlayerDataObject(
-                        visibility: PlayerDataObject.VisibilityOptions.Public,
-                        value: AuthenticationService.Instance.PlayerName)
-                },
-            };
+            upOptions.Data = CreatePlayerObject(AuthenticationService.Instance.PlayerName);
 
             string playerId = AuthenticationService.Instance.PlayerId;
             await LobbyService.Instance.UpdatePlayerAsync(newLobby.Id, playerId, upOptions);
 
             return newLobby;
-        }
-
-        public async Task RemoveLobby(string lobbyId)
-        {
-            try
-            {
-                await LobbyService.Instance.DeleteLobbyAsync(lobbyId);
-                m_MyLobby = null;
-            }
-            catch (LobbyServiceException e)
-            {
-                Debug.LogException(e);
-            }
         }
 
         public async Task JoinLobby(string lobbyId)
@@ -100,26 +71,15 @@ namespace MSE.Core
                 {
                     Player = new Unity.Services.Lobbies.Models.Player(
                         id: AuthenticationService.Instance.PlayerId,
-                        data: new Dictionary<string, PlayerDataObject>
-                        {
-                            {
-                                "name", new PlayerDataObject(
-                                    visibility: PlayerDataObject.VisibilityOptions.Public,
-                                    value: AuthenticationService.Instance.PlayerName
-                                )
-                            }
-                        }
+                        data: CreatePlayerObject(AuthenticationService.Instance.PlayerName)
                     )
                 };
                 Lobby joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
                 m_MyLobby = joinedLobby;
 
-                string stageName = m_MyLobby.Data["stage"].Value;
-                DataManager.CurrStageData = DataManager.GetStageData(stageName);
-
                 var callbacks = new LobbyEventCallbacks();
                 callbacks.LobbyChanged += OnLobbyChanged;
-                await LobbyService.Instance.SubscribeToLobbyEventsAsync(joinedLobby.Id, callbacks);
+                m_LobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(joinedLobby.Id, callbacks);
             }
             catch (LobbyServiceException e)
             {
@@ -134,6 +94,9 @@ namespace MSE.Core
             ulOptions.Data = new Dictionary<string, DataObject>
             {
                 {
+                    "started", new DataObject(DataObject.VisibilityOptions.Public, "false")
+                },
+                {
                     "joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode)
                 }
             };
@@ -145,12 +108,12 @@ namespace MSE.Core
         {
             try
             {
-                NetworkManager.Singleton.Shutdown();
-
                 string playerId = AuthenticationService.Instance.PlayerId;
+                await m_LobbyEvents.UnsubscribeAsync();
                 await LobbyService.Instance.RemovePlayerAsync(lobbyId, playerId);
 
                 m_MyLobby = null;
+                m_Started = false;
             }
             catch (LobbyServiceException e)
             {
@@ -207,6 +170,8 @@ namespace MSE.Core
 
         public async void OnLobbyChanged(ILobbyChanges changes)
         {
+            string prevHostId = m_MyLobby.HostId;
+
             if (changes.LobbyDeleted)
             {
                 return;
@@ -214,12 +179,18 @@ namespace MSE.Core
             else
             {
                 changes.ApplyToLobby(m_MyLobby);
+                
+                if (prevHostId != m_MyLobby.HostId)
+                {
+                }
+
                 OnLobbyUpdated?.Invoke();
             }
 
-            if (m_MyLobby.Data.ContainsKey("joinCode"))
+            if (m_MyLobby.Data.ContainsKey("joinCode") && !m_Started)
             {
                 bool isHost = m_MyLobby.HostId == AuthenticationService.Instance.PlayerId;
+                m_Started = true;
 
                 if (isHost)
                 {
@@ -231,6 +202,26 @@ namespace MSE.Core
                     NetworkManager.Singleton.StartClient();
                 }
             }
+        }
+
+        private Dictionary<string, DataObject> CreateLobbyDataObject(string stageName)
+        {
+            Dictionary<string, DataObject> datas = new Dictionary<string, DataObject>
+            {
+                { "stage", new DataObject(DataObject.VisibilityOptions.Public, stageName, DataObject.IndexOptions.S1) }
+            };
+
+            return datas;
+        }
+
+        private Dictionary<string, PlayerDataObject> CreatePlayerObject(string playerName)
+        {
+            Dictionary<string, PlayerDataObject> datas = new Dictionary<string, PlayerDataObject>
+            {
+                { "name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, playerName) }
+            };
+
+            return datas;
         }
     }
 }
