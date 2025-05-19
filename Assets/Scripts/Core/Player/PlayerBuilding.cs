@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.UI;
+
 
 namespace MSE.Core
 {
@@ -91,6 +89,8 @@ namespace MSE.Core
 
             if (context.performed)
             {
+                if (!m_BlockSilhoutte.gameObject.activeSelf) return;
+
                 BuildRpc(m_BlockIndex, m_CurrPos, m_BlockSilhoutte.transform.rotation, m_BlockSilhoutte.Detection.DetectedBuiltIndice.ToArray());
             }
         }
@@ -118,7 +118,7 @@ namespace MSE.Core
 
             m_BlockIndex = block.Index;
             m_BlockSilhoutte = Instantiate(DataManager.GetBlock(block.Index));
-            m_BlockSilhoutte.ReadyToBuild();
+            m_BlockSilhoutte.SetStrategy(BlockStrategyType.READY_TO_BUILD);
         }
 
         [Rpc(SendTo.Server)]
@@ -129,8 +129,9 @@ namespace MSE.Core
                 ownerClientId: rpcParams.Receive.SenderClientId,
                 position: pos,
                 rotation: rot);
+            nobj.DontDestroyWithOwner = true;
             Block block = nobj.GetComponent<Block>();
-            block.OnBuilt();
+            block.SetStrategy(BlockStrategyType.BUILT_BY_PLAYER);
             GameEventCallbacks.OnBlockBuilt?.Invoke(block, builtIndice);
         }
 

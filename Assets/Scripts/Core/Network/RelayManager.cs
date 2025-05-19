@@ -36,7 +36,7 @@ namespace MSE.Core
 
         public void Shutdown()
         {
-            NetworkManager.Singleton.Shutdown();
+            NetworkManager.Singleton.Shutdown(true);
         }
     }
 }
