@@ -22,11 +22,6 @@ namespace MSE.Core
             }
         }
 
-        private void Start()
-        {
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
-        }
-
         private void OnApplicationQuit()
         {
             var myLobby = LobbyManager.Instance.MyLobby;
@@ -34,11 +29,8 @@ namespace MSE.Core
             {
                 LobbyManager.Instance.LeaveLobby(myLobby.Id);
             }
-        }
 
-        private void OnClientDisconnected(ulong id)
-        {
-            SceneManager.LoadScene("Lobby");
+            LobbyManager.Instance.Started = false;
         }
     }
 }

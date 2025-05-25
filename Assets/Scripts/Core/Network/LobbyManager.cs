@@ -37,6 +37,7 @@ namespace MSE.Core
         public Action OnLobbyUpdated;
 
         private bool m_Started = false;
+        public bool Started { get { return m_Started; } set { m_Started = value; } }
 
         public async Task<Lobby> CreateLobby(string lobbyName, int maxPlayers, string stage)
         {
@@ -55,7 +56,7 @@ namespace MSE.Core
             m_MyLobby = newLobby;
 
             UpdatePlayerOptions upOptions = new UpdatePlayerOptions();
-            upOptions.Data = CreatePlayerObject(AuthenticationService.Instance.PlayerName);
+            upOptions.Data = CreatePlayerObject(AuthenticationService.Instance.PlayerName, NetworkManager.Singleton.LocalClientId, true);
 
             string playerId = AuthenticationService.Instance.PlayerId;
             await LobbyService.Instance.UpdatePlayerAsync(newLobby.Id, playerId, upOptions);
@@ -71,7 +72,7 @@ namespace MSE.Core
                 {
                     Player = new Unity.Services.Lobbies.Models.Player(
                         id: AuthenticationService.Instance.PlayerId,
-                        data: CreatePlayerObject(AuthenticationService.Instance.PlayerName)
+                        data: CreatePlayerObject(AuthenticationService.Instance.PlayerName, NetworkManager.Singleton.LocalClientId)
                     )
                 };
                 Lobby joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
@@ -80,8 +81,7 @@ namespace MSE.Core
                 var callbacks = new LobbyEventCallbacks();
                 callbacks.LobbyChanged += OnLobbyChanged;
                 m_LobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(joinedLobby.Id, callbacks);
-            }
-            catch (LobbyServiceException e)
+            } catch (LobbyServiceException e)
             {
                 Debug.LogException(e);
             }
@@ -114,8 +114,7 @@ namespace MSE.Core
 
                 m_MyLobby = null;
                 m_Started = false;
-            }
-            catch (LobbyServiceException e)
+            } catch (LobbyServiceException e)
             {
                 Debug.LogException(e);
             }
@@ -149,8 +148,7 @@ namespace MSE.Core
 
                 QueryResponse querriedLobbies = await LobbyService.Instance.QueryLobbiesAsync(options);
                 return querriedLobbies.Results;
-            }
-            catch (LobbyServiceException e)
+            } catch (LobbyServiceException e)
             {
                 Debug.LogException(e);
                 return null;
@@ -175,11 +173,10 @@ namespace MSE.Core
             if (changes.LobbyDeleted)
             {
                 return;
-            }
-            else
+            } else
             {
                 changes.ApplyToLobby(m_MyLobby);
-                
+
                 if (prevHostId != m_MyLobby.HostId)
                 {
                 }
@@ -187,8 +184,14 @@ namespace MSE.Core
                 OnLobbyUpdated?.Invoke();
             }
 
-            if (m_MyLobby.Data.ContainsKey("joinCode") && !m_Started)
+            if (m_MyLobby.Data.ContainsKey("joinCode"))
             {
+                if (m_Started)
+                {
+                    Debug.LogWarning("[!] Player is already started!");
+                    return;
+                }
+
                 bool isHost = m_MyLobby.HostId == AuthenticationService.Instance.PlayerId;
                 m_Started = true;
 
@@ -214,11 +217,13 @@ namespace MSE.Core
             return datas;
         }
 
-        private Dictionary<string, PlayerDataObject> CreatePlayerObject(string playerName)
+        private Dictionary<string, PlayerDataObject> CreatePlayerObject(string playerName, ulong clientId, bool isHost = false)
         {
             Dictionary<string, PlayerDataObject> datas = new Dictionary<string, PlayerDataObject>
             {
-                { "name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, playerName) }
+                { "name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, playerName) },
+                { "clientId", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, clientId.ToString()) },
+                { "isHost", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, isHost.ToString()) }
             };
 
             return datas;
