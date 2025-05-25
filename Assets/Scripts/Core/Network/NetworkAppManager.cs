@@ -38,7 +38,11 @@ namespace MSE.Core
 
         private void OnClientDisconnected(ulong id)
         {
-            SceneManager.LoadScene("Lobby");
+            var myLobby = LobbyManager.Instance.MyLobby;
+            if (myLobby != null && myLobby.Data["started"].Value == "true")
+            {
+                SceneManager.LoadScene("Lobby");
+            }
         }
     }
 }
