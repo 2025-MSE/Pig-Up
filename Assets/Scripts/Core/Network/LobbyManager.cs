@@ -10,6 +10,7 @@ using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -203,6 +204,21 @@ namespace MSE.Core
                     NetworkManager.Singleton.StartClient();
                 }
             }
+        }
+
+        public async void ApplyRelayConnection(string allocationId, string connectionInfo)
+        {
+            if (MyLobby == null)
+            {
+                UIManager.Instance.ShowToastMessage("You are not in a lobby. Invalid action.");
+                return;
+            }
+
+            UpdatePlayerOptions upOptions = new UpdatePlayerOptions();
+            upOptions.AllocationId = allocationId;
+            upOptions.ConnectionInfo = connectionInfo;
+
+            await LobbyService.Instance.UpdatePlayerAsync(MyLobby.Id, AuthenticationService.Instance.PlayerId, upOptions);
         }
 
         private Dictionary<string, DataObject> CreateLobbyDataObject(string stageName)

@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace MSE.Core
 {
-    public class NetworkAppManager : NetworkBehaviour
+    public class NetworkAppManager : MonoBehaviour
     {
         private static NetworkAppManager s_Instance;
         public static NetworkAppManager Instance => s_Instance;
@@ -22,6 +22,11 @@ namespace MSE.Core
             }
         }
 
+        private void Start()
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+        }
+
         private void OnApplicationQuit()
         {
             var myLobby = LobbyManager.Instance.MyLobby;
@@ -31,6 +36,12 @@ namespace MSE.Core
             }
 
             LobbyManager.Instance.Started = false;
+        }
+
+        private void OnClientDisconnected(ulong id)
+        {
+            Debug.Log($"Client {id} disconnected!");
+            UIManager.Instance.ShowToastMessage($"Client {id} disconnected!");
         }
     }
 }
