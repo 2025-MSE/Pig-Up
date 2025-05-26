@@ -45,6 +45,9 @@ namespace MSE.Core
             options.IsPrivate = false;
             options.IsLocked = false;
             options.Data = CreateLobbyDataObject(stage);
+            options.Player = new Unity.Services.Lobbies.Models.Player(
+                id: AuthenticationService.Instance.PlayerId,
+                data: CreatePlayerObject(AuthenticationService.Instance.PlayerName, true));
 
             Lobby newLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
             m_Lobbies.Add(newLobby);
@@ -54,12 +57,6 @@ namespace MSE.Core
             m_LobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(newLobby.Id, callbacks);
 
             m_MyLobby = newLobby;
-
-            UpdatePlayerOptions upOptions = new UpdatePlayerOptions();
-            upOptions.Data = CreatePlayerObject(AuthenticationService.Instance.PlayerName, NetworkManager.Singleton.LocalClientId, true);
-
-            string playerId = AuthenticationService.Instance.PlayerId;
-            await LobbyService.Instance.UpdatePlayerAsync(newLobby.Id, playerId, upOptions);
 
             return newLobby;
         }
@@ -72,15 +69,15 @@ namespace MSE.Core
                 {
                     Player = new Unity.Services.Lobbies.Models.Player(
                         id: AuthenticationService.Instance.PlayerId,
-                        data: CreatePlayerObject(AuthenticationService.Instance.PlayerName, NetworkManager.Singleton.LocalClientId)
-                    )
+                        data: CreatePlayerObject(AuthenticationService.Instance.PlayerName))
                 };
                 Lobby joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
-                m_MyLobby = joinedLobby;
 
                 var callbacks = new LobbyEventCallbacks();
                 callbacks.LobbyChanged += OnLobbyChanged;
-                m_LobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(joinedLobby.Id, callbacks);
+                m_LobbyEvents = await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobbyId, callbacks);
+
+                m_MyLobby = joinedLobby;
             } catch (LobbyServiceException e)
             {
                 Debug.LogException(e);
@@ -217,12 +214,11 @@ namespace MSE.Core
             return datas;
         }
 
-        private Dictionary<string, PlayerDataObject> CreatePlayerObject(string playerName, ulong clientId, bool isHost = false)
+        private Dictionary<string, PlayerDataObject> CreatePlayerObject(string playerName, bool isHost = false)
         {
             Dictionary<string, PlayerDataObject> datas = new Dictionary<string, PlayerDataObject>
             {
                 { "name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, playerName) },
-                { "clientId", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, clientId.ToString()) },
                 { "isHost", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, isHost.ToString()) }
             };
 
