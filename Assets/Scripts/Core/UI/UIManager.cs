@@ -14,6 +14,9 @@ namespace MSE.Core
         private UICharacterInfoHandler m_InfoHandler;
         public UICharacterInfoHandler InfoHandler => m_InfoHandler;
 
+        [SerializeField]
+        private ToastMessage m_ToastMessage;
+
         private void Awake()
         {
             if (s_Instance != null && s_Instance != this)
@@ -25,6 +28,11 @@ namespace MSE.Core
                 s_Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
+        }
+
+        public void ShowToastMessage(string text)
+        {
+            m_ToastMessage.ShowMessage(text);
         }
     }
 }

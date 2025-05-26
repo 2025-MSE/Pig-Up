@@ -40,6 +40,5 @@ public class ToastMessage : MonoBehaviour
             yield return null;
         }
         canvasGroup.alpha = 0;
-        gameObject.SetActive(false);
     }
 }
