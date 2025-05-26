@@ -176,6 +176,7 @@ namespace MSE.Core
 
                 if (prevHostId != m_MyLobby.HostId)
                 {
+                    UIManager.Instance.ShowToastMessage("Host has been disconnected.");
                 }
 
                 OnLobbyUpdated?.Invoke();

@@ -28,6 +28,7 @@ namespace MSE.Core
             catch (Exception ex)
             {
                 AuthenticationService.Instance.SignOut();
+                UIManager.Instance.ShowToastMessage("Sign up failed. Please try again.");
                 throw ex;
             }
         }
@@ -42,6 +43,7 @@ namespace MSE.Core
             catch (Exception ex)
             {
                 AuthenticationService.Instance.SignOut();
+                UIManager.Instance.ShowToastMessage("Login failed. Please try again.");
                 throw ex;
             }
         }
