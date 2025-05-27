@@ -3777,6 +3777,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ba703a8d51ad2e43a1eca348ee813a3, type: 3}
+--- !u!114 &1301447419 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2355966688822140607, guid: 8ba703a8d51ad2e43a1eca348ee813a3, type: 3}
+  m_PrefabInstance: {fileID: 1301447418}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3422257021e44f64b9cca0a66d4dcd1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1301447420 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1209993915112418957, guid: 8ba703a8d51ad2e43a1eca348ee813a3, type: 3}
@@ -4492,7 +4503,7 @@ MonoBehaviour:
   m_Canvas2D: {fileID: 1823601158}
   m_Canvas3D: {fileID: 1234014069}
   m_InfoHandler: {fileID: 1462361750}
-  m_ToastMessage: {fileID: 0}
+  m_ToastMessage: {fileID: 1301447419}
 --- !u!4 &1689933891
 Transform:
   m_ObjectHideFlags: 0

@@ -56,5 +56,14 @@ namespace MSE.Core
                 newInfo.SetTarget(transforms[i]);
             }
         }
+
+        public void RemoveAllInfos()
+        {
+            foreach (Transform tr in m_InfoRoot)
+            {
+                Destroy(tr.gameObject);
+            }
+            m_Infos.Clear();
+        }
     }
 }
