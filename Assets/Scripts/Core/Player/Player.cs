@@ -56,6 +56,10 @@ namespace MSE.Core
             {
                 RemoveNameInfoRpc(AuthenticationService.Instance.PlayerId);
             }
+            else
+            {
+                UIManager.Instance.InfoHandler.RemoveAllInfos();
+            }
         }
 
         [Rpc(SendTo.ClientsAndHost)]
@@ -73,6 +77,7 @@ namespace MSE.Core
         [Rpc(SendTo.ClientsAndHost)]
         private void RemoveNameInfoRpc(string id)
         {
+            Debug.Log($"Player id {id} name tag will be destroyed!");
             UICharacterInfoHandler.OnCharacterDeactivated?.Invoke(id);
         }
     }

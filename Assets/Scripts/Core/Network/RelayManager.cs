@@ -24,6 +24,7 @@ namespace MSE.Core
             var allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, connectionType));
             var joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+
             return joinCode;
         }
 

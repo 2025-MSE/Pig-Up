@@ -17,9 +17,25 @@ namespace MSE.Core
         private Building m_Building;
 
         private float m_StartTime = 0f;
+        private float m_ElapsedTime = 0f;
 
         [SerializeField]
+        private BuildProgressBar m_BuildProgressBar;
+        [SerializeField]
+        private UITimer m_Timer;
+        [SerializeField]
         private UIStageResult m_ResultPanel;
+
+        private bool m_Cleared = false;
+
+        void Awake()
+        {
+            m_BuildProgressBar.SetProgress(0f);
+            m_Timer.SetTime(0f);
+            m_StartTime = 0f;
+            m_ElapsedTime = 0f;
+            m_Cleared = false;
+        }
 
         public override void OnNetworkSpawn()
         {
@@ -38,6 +54,21 @@ namespace MSE.Core
             if (!IsServer) return;
 
             GameEventCallbacks.OnBlockBuilt -= OnBlockBuilt;
+        }
+
+        void Update()
+        {
+            if (IsHost && !m_Cleared)
+            {
+                m_ElapsedTime = Time.time - m_StartTime;
+                UpdateTimerRpc(m_ElapsedTime);
+            }
+        }
+
+        [Rpc(SendTo.ClientsAndHost)]
+        private void UpdateTimerRpc(float time)
+        {
+            m_Timer.SetTime(time);
         }
 
         [Rpc(SendTo.Server)]
@@ -138,11 +169,20 @@ namespace MSE.Core
                     checkCount += 1;
             }
 
+            float ratio = (float)checkCount / m_Building.Blocks.Count;
+            UpdateBuildProgressBarRpc(ratio);
+
             if (checkCount >= m_Building.Blocks.Count)
             {
-                float elapsedTime = Time.time - m_StartTime;
-                CompleteStageRpc(elapsedTime);
+                m_Cleared = true;
+                CompleteStageRpc(m_ElapsedTime);
             }
+        }
+
+        [Rpc(SendTo.ClientsAndHost)]
+        private void UpdateBuildProgressBarRpc(float ratio)
+        {
+            m_BuildProgressBar.SetProgress(ratio);
         }
 
         [Rpc(SendTo.ClientsAndHost)]
