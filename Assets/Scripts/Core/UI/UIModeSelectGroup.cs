@@ -11,6 +11,11 @@ namespace MSE.Core
         {
             m_StoryStageSelectGroup.gameObject.SetActive(true);
         }
+
+        public void OnInfinityModePressed()
+        {
+            UIManager.Instance.ShowToastMessage("Infinity mode is work in progress.");
+        }
     }
 }
 

@@ -84,5 +84,10 @@ namespace MSE.Core
                 SignupAsync();
             }
         }
+
+        public void OnBackButtonPressed()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

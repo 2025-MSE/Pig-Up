@@ -8,8 +8,18 @@ namespace MSE.Core
         [SerializeField] private UILobbyCell m_LobbyCellPrefab;
         [SerializeField] private Transform m_LobbyRootTrans;
 
-        [SerializeField]
-        private UIRoomGroup m_RoomGroup;
+        [SerializeField] private GameObject m_IconObj;
+        [SerializeField] private GameObject m_RootObj;
+
+        [SerializeField] private UIRoomGroup m_RoomGroup;
+
+        private bool m_Refreshing = false;
+
+        private void OnEnable()
+        {
+            m_Refreshing = false;
+            Refresh();
+        }
 
         public async void OnCreateLobbyButtonPressed()
         {
@@ -25,6 +35,11 @@ namespace MSE.Core
             Refresh();
         }
 
+        public void OnBackButtonPressed()
+        {
+            gameObject.SetActive(false);
+        }
+
         public async void OnLobbyCellPressed(UILobbyCell lobbyCell)
         {
             await LobbyManager.Instance.JoinLobby(lobbyCell.LobbyId);
@@ -35,6 +50,12 @@ namespace MSE.Core
 
         public async void Refresh()
         {
+            if (m_Refreshing) return;
+
+            m_Refreshing = true;
+            m_IconObj.SetActive(true);
+            m_RootObj.SetActive(false);
+
             foreach (Transform childTrans in m_LobbyRootTrans)
             {
                 Destroy(childTrans.gameObject);
@@ -48,6 +69,10 @@ namespace MSE.Core
                 newLobbyCell.Config(lobby.Id, lobby.Name, lobby.Players.Count, lobby.MaxPlayers);
                 newLobbyCell.Button.onClick.AddListener(() => OnLobbyCellPressed(newLobbyCell));
             }
+
+            m_Refreshing = false;
+            m_IconObj.SetActive(false);
+            m_RootObj.SetActive(true);
         }
     }
 }

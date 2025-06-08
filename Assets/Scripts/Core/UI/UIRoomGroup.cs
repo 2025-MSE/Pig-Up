@@ -43,8 +43,6 @@ namespace MSE.Core
             m_RoomNameText.text = myLobby.Name;
             for (int i = 0; i < myLobby.Players.Count; i++)
             {
-                Debug.Log(m_Slots[i]);
-
                 var player = myLobby.Players[i];
                 m_Slots[i].gameObject.SetActive(true);
                 m_Slots[i].Config(player.Data["name"].Value);

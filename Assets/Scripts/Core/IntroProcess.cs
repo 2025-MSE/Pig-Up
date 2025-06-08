@@ -2,11 +2,11 @@
  * Owner: Dongjin Kuk
  */
 
+using System;
 using System.Collections;
-using Unity.Services.Authentication;
+using System.Threading.Tasks;
 using Unity.Services.Core;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace MSE.Core
 {
@@ -32,7 +32,11 @@ namespace MSE.Core
 
         private IEnumerator RunProcess()
         {
+            Task task = UnityServices.InitializeAsync();
+            yield return new WaitUntil(() => task.IsCompleted);
+
             yield return StartCoroutine(SplashCoroutine());
+            yield return new WaitForSeconds(0.5f);
             m_IntroGroup.gameObject.SetActive(true);
         }
 
@@ -69,12 +73,8 @@ namespace MSE.Core
             m_SplashGroup.gameObject.SetActive(false);
         }
 
-        public async void OnStartTouched()
+        public void OnStartTouched()
         {
-            Debug.Log("InitializeAsync...");
-
-            await UnityServices.InitializeAsync();
-        
             m_LoginGroup.gameObject.SetActive(true);
         }
     }
