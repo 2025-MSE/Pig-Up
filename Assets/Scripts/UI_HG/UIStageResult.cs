@@ -26,7 +26,11 @@ public class UIStageResult : MonoBehaviour
         gameObject.SetActive(true);
 
         stageNameText.text = $"Stage {stageName}";
-        timeText.text = $"{Mathf.FloorToInt(clearTime / 60)}:{Mathf.FloorToInt(clearTime % 60)}";
+
+        int min = Mathf.FloorToInt(clearTime / 60);
+        int sec = Mathf.FloorToInt(clearTime % 60);
+
+        timeText.text = $"{min.ToString().PadLeft(2, '0')}:{sec.ToString().PadLeft(2, '0')}";
 
         resultText.text = isClear ? "CLEAR!" : "FAIL...";
         resultText.color = isClear ? Color.yellow : Color.red;
