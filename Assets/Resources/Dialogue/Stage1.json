@@ -1,0 +1,25 @@
+{
+  "stage": 1,
+  "dialog": [
+    {
+      "type": "pig",
+      "animation": "Idle",
+      "text": "pig dialogue"
+    },
+    {
+      "type": "wolf",
+      "animation": "Idle",
+      "text": "wolf dialgoue"
+    },
+    {
+      "type": "wolf",
+      "animation": "Run",
+      "text":  "wolf dialogue2"
+    },
+    {
+      "type": "pig",
+      "animation": "Walk",
+      "text": "pig dialogue2"
+    }
+  ]
+}
