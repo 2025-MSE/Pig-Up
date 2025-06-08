@@ -2,29 +2,25 @@
  * Owner: Dongjin Kuk
  */
 
-using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
 using UnityEngine;
 
 namespace MSE.Core
 {
-    public struct PlayerTag
-    {
-        public string Id;
-        public string Name;
-        public Transform Transform;
-    }
-
     public class Player : NetworkBehaviour
     {
+        private NetworkVariable<FixedString64Bytes> m_PlayerName = new NetworkVariable<FixedString64Bytes>(writePerm: NetworkVariableWritePermission.Owner);
+
         [SerializeField]
         private Camera m_Camera;
 
         private Animator m_Animator;
         public Animator Animator => m_Animator;
 
-        private static List<PlayerTag> m_PlayerTags = new List<PlayerTag>();
+        [SerializeField]
+        private UICharacterInfo m_Info;
 
         private void Awake()
         {
@@ -36,49 +32,22 @@ namespace MSE.Core
         {
             m_Camera.gameObject.SetActive(IsOwner);
 
-            // Spawn it's player name info.
-            if (!IsOwner)
+            if (IsOwner)
             {
-                SpawnNameInfoRpc(AuthenticationService.Instance.PlayerId, AuthenticationService.Instance.PlayerName);
+                string playerName = AuthenticationService.Instance.PlayerName;
+                playerName = string.IsNullOrEmpty(playerName) ? AuthenticationService.Instance.PlayerId : playerName;
+                m_PlayerName.Value = playerName;
             }
-            else
-            {
-                foreach (var tag in m_PlayerTags)
-                {
-                    UICharacterInfoHandler.OnCharacterActivated?.Invoke(tag.Id, tag.Transform, tag.Name, transform);
-                }
-            }
+
+            m_PlayerName.OnValueChanged += OnPlayerNameChanged;
+            m_Info.SetInfo(m_PlayerName.Value.ToString());
+
+            Debug.Log($"PlayerName: {m_PlayerName.Value.ToString()}");
         }
 
-        public override void OnNetworkDespawn()
+        private void OnPlayerNameChanged(FixedString64Bytes prevName, FixedString64Bytes currName)
         {
-            if (!IsOwner)
-            {
-                RemoveNameInfoRpc(AuthenticationService.Instance.PlayerId);
-            }
-            else
-            {
-                UIManager.Instance.InfoHandler.RemoveAllInfos();
-            }
-        }
-
-        [Rpc(SendTo.ClientsAndHost)]
-        private void SpawnNameInfoRpc(string id, string name)
-        {
-            if (NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject() == null)
-            {
-                m_PlayerTags.Add(new PlayerTag { Id = id, Name = string.IsNullOrEmpty(name) ? id : name, Transform = transform });
-                return;
-            }
-
-            UICharacterInfoHandler.OnCharacterActivated?.Invoke(id, transform, string.IsNullOrEmpty(name) ? id : name, NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().transform);
-        }
-
-        [Rpc(SendTo.ClientsAndHost)]
-        private void RemoveNameInfoRpc(string id)
-        {
-            Debug.Log($"Player id {id} name tag will be destroyed!");
-            UICharacterInfoHandler.OnCharacterDeactivated?.Invoke(id);
+            m_Info.SetInfo(currName.ToString());
         }
     }
 }

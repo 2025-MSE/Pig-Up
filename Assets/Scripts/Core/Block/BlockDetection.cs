@@ -19,9 +19,6 @@ namespace MSE.Core
         {
             if (other.transform.parent.TryGetComponent(out Block block))
             {
-                Debug.Log($"BlockDetection::OnTriggerEnter::InBuildingIndex {block.InBuildingIndex}");
-                Debug.Log($"BlockDetection::OnTriggerEnter::StrategyType {block.StrategyType.ToString()}");
-
                 if (block.StrategyType != BlockStrategyType.IN_BUILDING) return;
                 if (block.Index != m_Block.Index) return;
 
