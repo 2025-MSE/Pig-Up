@@ -26,6 +26,7 @@ namespace MSE.Core
 
         public void OnSignupPressed()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
             m_SignupGroup.gameObject.SetActive(true);
         }
 
@@ -34,6 +35,8 @@ namespace MSE.Core
             if (m_Loginning) return;
 
             m_Loginning = true;
+
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
 
             string username = m_UsernameField.text;
             string password = m_PwdField.text;
@@ -79,6 +82,7 @@ namespace MSE.Core
 
         public void OnBackButtonPressed()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
             gameObject.SetActive(false);
         }
     }

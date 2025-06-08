@@ -91,6 +91,7 @@ namespace MSE.Core
             {
                 if (!m_BlockSilhoutte.gameObject.activeSelf) return;
 
+                AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.blockPlaceSFX);
                 BuildRpc(m_BlockIndex, m_CurrPos, m_BlockSilhoutte.transform.rotation, m_BlockSilhoutte.Detection.DetectedBuiltIndice.ToArray());
             }
         }

@@ -168,6 +168,7 @@ namespace MSE.Core
 
         private void Jump()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.jumpSFX);
             m_Velocity.y += Mathf.Sqrt(m_JumpHeight * -2.0f * -9.81f);
         }
 

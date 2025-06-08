@@ -41,8 +41,6 @@ namespace MSE.Core
 
             m_PlayerName.OnValueChanged += OnPlayerNameChanged;
             m_Info.SetInfo(m_PlayerName.Value.ToString());
-
-            Debug.Log($"PlayerName: {m_PlayerName.Value.ToString()}");
         }
 
         private void OnPlayerNameChanged(FixedString64Bytes prevName, FixedString64Bytes currName)

@@ -37,6 +37,8 @@ namespace MSE.Core
 
         public void OnStageButtonPressed(string stageName)
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
+
             StageData stageData = DataManager.GetStageData(stageName);
             DataManager.CurrStageData = stageData;
 
@@ -45,6 +47,7 @@ namespace MSE.Core
 
         public void OnBackButtonPressed()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
             gameObject.SetActive(false);
         }
     }

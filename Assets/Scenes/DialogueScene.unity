@@ -335,7 +335,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 555
   m_TargetDisplay: 0
 --- !u!224 &287829103
 RectTransform:
@@ -725,7 +725,6 @@ MonoBehaviour:
   nameBgImage: {fileID: 2021886893}
   pig: {fileID: 5618513947189319499}
   wolf: {fileID: 5689319355182059254}
-  stageName: Stage1
   nextSceneName: Game
 --- !u!4 &1710504206
 Transform:
@@ -759,7 +758,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1837853990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,7 +830,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2019154333}
   - component: {fileID: 2019154332}
-  - component: {fileID: 2019154331}
   - component: {fileID: 2019154334}
   m_Layer: 0
   m_Name: Main Camera
@@ -840,14 +838,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &2019154331
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019154330}
-  m_Enabled: 1
 --- !u!20 &2019154332
 Camera:
   m_ObjectHideFlags: 0

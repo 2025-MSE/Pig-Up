@@ -1,3 +1,5 @@
+using MSE.Core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -42,7 +44,6 @@ public class DialogueManaager : MonoBehaviour
     private DialogueData dialogueData;
     private int currentIndex = 0;
 
-    public string stageName = "Stage1";
     public string nextSceneName = "";
 
     private Dictionary<string, CharacterInfo> characterInfoMap = new Dictionary<string, CharacterInfo>
@@ -51,10 +52,23 @@ public class DialogueManaager : MonoBehaviour
     { "wolf", new CharacterInfo { displayName = "Wolf", backgroundColor = new Color(0.5f, 0.5f, 0.5f) } },
     };
 
+    public static Action OnDialogueEnded;
+
     private void Start()
     {
-        LoadDialogueForStage(stageName);
+        LoadDialogueForStage(DataManager.CurrStageData.Name);
     }
+
+    private void OnEnable()
+    {
+        AudioManager.Instance.PlayAudio(AudioType.BGM, AudioManager.Instance.storyBGM);
+    }
+
+    private void OnDisable()
+    {
+        AudioManager.Instance.PlayAudio(AudioType.BGM, AudioManager.Instance.lobbyBGM);
+    }
+
     public void LoadDialogueForStage(string stage)
     {
         string path = $"Dialogue/{stage}";
@@ -83,7 +97,8 @@ public class DialogueManaager : MonoBehaviour
             dialogueText.text = "";
             pig.SetActive(false);
             wolf.SetActive(false);
-            SceneManager.LoadScene("NextSceneName");
+            SceneManager.UnloadSceneAsync("DialogueScene");
+            OnDialogueEnded?.Invoke();
             yield break;
         }
 

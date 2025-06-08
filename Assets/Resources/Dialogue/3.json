@@ -1,0 +1,25 @@
+{
+  "stage": 3,
+  "dialog": [
+    {
+      "type": "pig",
+      "animation": "Walk",
+      "text": "(Huff Huff) Finally I built a new house..."
+    },
+    {
+      "type": "wolf",
+      "animation": "Idle",
+      "text": "So, you think this one will save you?"
+    },
+    {
+      "type": "wolf",
+      "animation": "Run",
+      "text":  "Let's see how long it lasts! HAHAHA!"
+    },
+    {
+      "type": "pig",
+      "animation": "Walk",
+      "text": "Oh no... Not again!"
+    }
+  ]
+}

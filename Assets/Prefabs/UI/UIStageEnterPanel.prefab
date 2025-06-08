@@ -121,9 +121,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MSE.Core.UIStoryStageSelectGroup, Assembly-CSharp
-        m_MethodName: OnBackButtonPressed
+      - m_Target: {fileID: 1684753493702265448}
+        m_TargetAssemblyTypeName: MSE.Core.UIStageEnterPanel, Assembly-CSharp
+        m_MethodName: OnBackPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -426,7 +426,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5161567277667094324}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1684753493702265448}
+        m_TargetAssemblyTypeName: MSE.Core.UIStageEnterPanel, Assembly-CSharp
+        m_MethodName: OnLobbyPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!95 &9054465921686373735
 Animator:
   serializedVersion: 7
@@ -537,13 +549,14 @@ GameObject:
   - component: {fileID: 1434139723216595629}
   - component: {fileID: 1087375862987776174}
   - component: {fileID: 4127531765613030018}
+  - component: {fileID: 1684753493702265448}
   m_Layer: 5
   m_Name: UIStageEnterPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1434139723216595629
 RectTransform:
   m_ObjectHideFlags: 0
@@ -606,6 +619,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1684753493702265448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6724227606746212651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff065248145a24a43a4a3ce1e5303697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LobbyGroup: {fileID: 0}
 --- !u!1 &6854977675747830930
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,7 +827,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7172724522370159010}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1684753493702265448}
+        m_TargetAssemblyTypeName: MSE.Core.UIStageEnterPanel, Assembly-CSharp
+        m_MethodName: OnStoryPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!95 &6251862263209414305
 Animator:
   serializedVersion: 7

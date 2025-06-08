@@ -10,7 +10,8 @@ namespace MSE.Core
         IN_BUILDING,
         BUILT_BY_PLAYER,
         CHECKED,
-        IN_FIELD
+        IN_FIELD,
+        CHEAT
     }
 
     public class Block : NetworkBehaviour
@@ -109,6 +110,9 @@ namespace MSE.Core
                 case BlockStrategyType.IN_FIELD:
                     m_Strategy = new BlockInFieldStrategy(this);
                     break;
+                case BlockStrategyType.CHEAT:
+                    m_Strategy = new BlockCheatStrategy(this);
+                    break;
             }
             m_Strategy.Initialize();
         }
@@ -129,6 +133,12 @@ namespace MSE.Core
         public bool IsChecked()
         {
             return m_Checked.Value;
+        }
+
+        public void SetCheat()
+        {
+            SetChecked(true);
+            SetStrategy(BlockStrategyType.CHEAT);
         }
     }
 }

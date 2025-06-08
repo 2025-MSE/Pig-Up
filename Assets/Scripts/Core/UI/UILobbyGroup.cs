@@ -13,35 +13,49 @@ namespace MSE.Core
 
         [SerializeField] private UIRoomGroup m_RoomGroup;
 
+        private bool m_Creating = false;
         private bool m_Refreshing = false;
 
         private void OnEnable()
         {
+            m_Creating = false;
             m_Refreshing = false;
             Refresh();
         }
 
         public async void OnCreateLobbyButtonPressed()
         {
+            if (m_Creating) return;
+
+            m_Creating = true;
+
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
+
             float randLobbySuffix = Random.Range(0, 1000);
             await LobbyManager.Instance.CreateLobby($"Lobby{randLobbySuffix}", 3, DataManager.CurrStageData.Name);
 
             m_RoomGroup.gameObject.SetActive(true);
             m_RoomGroup.Config();
+
+            m_Creating = false;
         }
 
         public void OnRefreshButtonPressed()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
             Refresh();
         }
 
         public void OnBackButtonPressed()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
             gameObject.SetActive(false);
         }
 
         public async void OnLobbyCellPressed(UILobbyCell lobbyCell)
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
+
             await LobbyManager.Instance.JoinLobby(lobbyCell.LobbyId);
 
             m_RoomGroup.gameObject.SetActive(true);

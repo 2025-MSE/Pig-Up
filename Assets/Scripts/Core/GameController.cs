@@ -4,6 +4,7 @@ using DG.Tweening;
 using Unity.Netcode;
 using Unity.Services.Authentication;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace MSE.Core
 {
@@ -37,6 +38,11 @@ namespace MSE.Core
             m_Cleared = false;
         }
 
+        private void Start()
+        {
+            AudioManager.Instance.PlayAudio(AudioType.BGM, AudioManager.Instance.gameBGM);
+        }
+
         public override void OnNetworkSpawn()
         {
             SpawnPlayerRpc();
@@ -63,6 +69,13 @@ namespace MSE.Core
                 m_ElapsedTime = Time.time - m_StartTime;
                 UpdateTimerRpc(m_ElapsedTime);
             }
+
+#if UNITY_EDITOR
+            if (IsServer && Input.GetKeyDown(KeyCode.C))
+            {
+                Cheat();
+            }
+#endif
         }
 
         [Rpc(SendTo.ClientsAndHost)]
@@ -189,7 +202,7 @@ namespace MSE.Core
         private void CompleteStageRpc(float elapsedTime)
         {
             Cursor.lockState = CursorLockMode.None;
-            m_ResultPanel.ShowResult(0, elapsedTime, true);
+            m_ResultPanel.ShowResult(DataManager.CurrStageData.Name, elapsedTime, true);
 
             try
             {
@@ -201,5 +214,17 @@ namespace MSE.Core
                 Debug.LogException(ex);
             }
         }
+
+#if UNITY_EDITOR
+        public void Cheat()
+        {
+            Block block = m_Building.Blocks.Find(block => !block.IsChecked());
+
+            if (block == null) return;
+
+            block.SetCheat();
+            CheckBuildingRpc();
+        }
+#endif
     }
 }

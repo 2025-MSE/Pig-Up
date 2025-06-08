@@ -4,22 +4,22 @@
     {
       "type": "pig",
       "animation": "Idle",
-      "text": "pig dialogue"
+      "text": "What's that sound?"
     },
     {
       "type": "wolf",
       "animation": "Idle",
-      "text": "wolf dialgoue"
+      "text": "There is a pig nearby."
     },
     {
       "type": "wolf",
       "animation": "Run",
-      "text":  "wolf dialogue2"
+      "text":  "I'm hungry! Time to hunt that pig!"
     },
     {
       "type": "pig",
       "animation": "Walk",
-      "text": "pig dialogue2"
+      "text": "Oh no! I need to build a house before it gets me!"
     }
   ]
 }

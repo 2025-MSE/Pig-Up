@@ -38,6 +38,7 @@ namespace MSE.Core
             yield return StartCoroutine(SplashCoroutine());
             yield return new WaitForSeconds(0.5f);
             m_IntroGroup.gameObject.SetActive(true);
+            AudioManager.Instance.PlayAudio(AudioType.BGM, AudioManager.Instance.titleBGM);
         }
 
         private IEnumerator SplashCoroutine()
@@ -75,6 +76,7 @@ namespace MSE.Core
 
         public void OnStartTouched()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
             m_LoginGroup.gameObject.SetActive(true);
         }
     }

@@ -17,15 +17,15 @@ public class UIStageResult : MonoBehaviour
     [SerializeField] private Sprite starEmpty;
 
     [Header("Buttons")]
-    [SerializeField] private Button nextStageButton;
-    [SerializeField] private Button retryButton;
     [SerializeField] private Button exitButton;
 
-    public void ShowResult(int stageIndex, float clearTime, bool isClear)
+    public void ShowResult(string stageName, float clearTime, bool isClear)
     {
+        AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.rankPopupSFX);
+
         gameObject.SetActive(true);
 
-        stageNameText.text = $"Stage {stageIndex + 1}";
+        stageNameText.text = $"Stage {stageName}";
         timeText.text = $"{Mathf.FloorToInt(clearTime / 60)}:{Mathf.FloorToInt(clearTime % 60)}";
 
         resultText.text = isClear ? "CLEAR!" : "FAIL...";
@@ -52,19 +52,11 @@ public class UIStageResult : MonoBehaviour
         }
     }
 
-    public void OnNextStagePressed()
-    {
-        Debug.Log("Next stage button pressed.");
-    }
-
-
-    public void OnRetryPressed()
-    {
-        Debug.Log("Retry button pressed.");
-    }
 
     public async void OnExitPressed()
     {
+        AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
+
         var myLobby = LobbyManager.Instance.MyLobby;
         RelayManager.Instance.Shutdown();
         await LobbyManager.Instance.LeaveLobby(myLobby.Id);

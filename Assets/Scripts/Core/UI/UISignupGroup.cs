@@ -42,6 +42,8 @@ namespace MSE.Core
 
             m_Signupping = true;
 
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
+
             string username = m_UsernameField.text;
             string password = m_PwdField.text;
             string playername = m_PlayerNameField.text;
@@ -87,6 +89,7 @@ namespace MSE.Core
 
         public void OnBackButtonPressed()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
             gameObject.SetActive(false);
         }
     }

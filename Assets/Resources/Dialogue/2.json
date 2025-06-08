@@ -1,0 +1,25 @@
+{
+  "stage": 2,
+  "dialog": [
+    {
+      "type": "pig",
+      "animation": "Idle",
+      "text": "I think I'm safe now..."
+    },
+    {
+      "type": "wolf",
+      "animation": "Idle",
+      "text": "Ha! Is that the house you built?"
+    },
+    {
+      "type": "wolf",
+      "animation": "Run",
+      "text":  "This'll be easy to crush! HAHAHA!"
+    },
+    {
+      "type": "pig",
+      "animation": "Walk",
+      "text": "Oh no! I need to build a stronger house..."
+    }
+  ]
+}

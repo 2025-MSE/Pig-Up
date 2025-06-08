@@ -58,6 +58,8 @@ namespace MSE.Core
 
         public async void OnExitPressed()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
+
             LobbyManager.Instance.OnLobbyUpdated -= OnUpdated;
 
             await LobbyManager.Instance.LeaveLobby(LobbyManager.Instance.MyLobby.Id);
@@ -66,6 +68,7 @@ namespace MSE.Core
 
         public async void OnStartPressed()
         {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
             await LobbyManager.Instance.GenerateRelayJoinCode();
         }
 
