@@ -38,6 +38,7 @@ namespace MSE.Core
             try
             {
                 await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
+                await AuthenticationService.Instance.GetPlayerNameAsync();
                 await API.UpdateUserIdAsync(AuthenticationService.Instance.PlayerId);
             }
             catch (Exception ex)
