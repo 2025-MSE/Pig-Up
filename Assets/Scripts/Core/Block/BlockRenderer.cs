@@ -9,13 +9,11 @@ namespace MSE.Core
 
         private void Awake()
         {
-            Renderer rRenderer = GetComponent<Renderer>();
-            m_Renderers.Add(rRenderer);
-            foreach (Transform tr in transform)
+            if (transform.TryGetComponent(out Renderer renderer))
             {
-                Renderer cRenderer = tr.GetComponent<Renderer>();
-                m_Renderers.Add(cRenderer);
+                m_Renderers.Add(renderer);
             }
+            FindRenderer(transform);
         }
 
         public void SetTransparency(float alpha)
@@ -28,6 +26,19 @@ namespace MSE.Core
                     color.a = alpha;
                     mat.color = color;
                 }
+            }
+        }
+
+        private void FindRenderer(Transform root)
+        {
+            foreach (Transform tr in root)
+            {
+                if (tr.TryGetComponent(out Renderer renderer))
+                {
+                    m_Renderers.Add(renderer);
+                }
+
+                FindRenderer(tr);
             }
         }
     }
