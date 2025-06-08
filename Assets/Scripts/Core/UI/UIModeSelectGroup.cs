@@ -7,6 +7,9 @@ namespace MSE.Core
         [SerializeField]
         private UIStoryStageSelectGroup m_StoryStageSelectGroup;
 
+        [SerializeField]
+        private GameObject m_SettingsPanelObj;
+
         private void Start()
         {
             AudioManager.Instance.PlayAudio(AudioType.BGM, AudioManager.Instance.lobbyBGM);
@@ -22,6 +25,12 @@ namespace MSE.Core
         {
             AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
             UIManager.Instance.ShowToastMessage("Infinity mode is work in progress.");
+        }
+
+        public void OnSettingsPressed()
+        {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.clickSFX);
+            m_SettingsPanelObj.SetActive(true);
         }
     }
 }

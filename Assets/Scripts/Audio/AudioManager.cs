@@ -20,6 +20,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip clickSFX;
     public AudioClip jumpSFX;
 
+    public float BGMVolume => bgmSource.volume;
+    public float SFXVolume => sfxSource.volume;
+
     private void Awake()
     {
         if (Instance == null)
@@ -52,5 +55,17 @@ public class AudioManager : MonoBehaviour
     public void StopBGM()
     {
         bgmSource.Stop();
+    }
+
+    public void SetVolume(AudioType type, float volume)
+    {
+        if (type == AudioType.BGM)
+        {
+            bgmSource.volume = volume;
+        }
+        else if (type == AudioType.SFX)
+        {
+            sfxSource.volume = volume;
+        }
     }
 }
