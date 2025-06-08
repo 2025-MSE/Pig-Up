@@ -8,7 +8,7 @@ namespace MSE.Core
     public class UIStoryStageSelectGroup : MonoBehaviour
     {
         [SerializeField]
-        private UILobbyGroup m_LobbyGroup;
+        private UIStageEnterPanel m_StageEnterPanel;
 
         [SerializeField]
         private Transform m_ButtonRoot;
@@ -40,7 +40,12 @@ namespace MSE.Core
             StageData stageData = DataManager.GetStageData(stageName);
             DataManager.CurrStageData = stageData;
 
-            m_LobbyGroup.gameObject.SetActive(true);
+            m_StageEnterPanel.gameObject.SetActive(true);
+        }
+
+        public void OnBackButtonPressed()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

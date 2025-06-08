@@ -26,7 +26,6 @@ namespace MSE.Core
 
         public void OnSignupPressed()
         {
-            gameObject.SetActive(false);
             m_SignupGroup.gameObject.SetActive(true);
         }
 
@@ -76,6 +75,11 @@ namespace MSE.Core
             {
                 LoginAsync();
             }
+        }
+
+        public void OnBackButtonPressed()
+        {
+            gameObject.SetActive(false);
         }
     }
 }
