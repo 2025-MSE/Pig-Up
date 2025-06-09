@@ -26,6 +26,8 @@ namespace MSE.Core
         private UITimer m_Timer;
         [SerializeField]
         private UIStageResult m_ResultPanel;
+        [SerializeField]
+        private UIGiveUpPanel m_GiveUpPanel;
 
         private bool m_Cleared = false;
 
@@ -50,6 +52,7 @@ namespace MSE.Core
             if (!IsServer) return;
 
             GameEventCallbacks.OnBlockBuilt += OnBlockBuilt;
+            m_GiveUpPanel.OnGiveUp += GiveUp;
 
             m_StartTime = Time.time;
             CreateBuilding();
@@ -60,6 +63,7 @@ namespace MSE.Core
             if (!IsServer) return;
 
             GameEventCallbacks.OnBlockBuilt -= OnBlockBuilt;
+            m_GiveUpPanel.OnGiveUp -= GiveUp;
         }
 
         void Update()
@@ -70,6 +74,10 @@ namespace MSE.Core
                 UpdateTimerRpc(m_ElapsedTime);
             }
 
+            if (IsServer && Input.GetKeyDown(KeyCode.Escape))
+            {
+                m_GiveUpPanel.gameObject.SetActive(true);
+            }
 #if UNITY_EDITOR
             if (IsServer && Input.GetKeyDown(KeyCode.C))
             {
@@ -213,6 +221,19 @@ namespace MSE.Core
             {
                 Debug.LogException(ex);
             }
+        }
+
+        private void GiveUp()
+        {
+            GiveUpRpc(m_ElapsedTime);
+        }
+
+        [Rpc(SendTo.ClientsAndHost)]
+        private void GiveUpRpc(float elapsedTime)
+        {
+            m_Cleared = true;
+            Cursor.lockState = CursorLockMode.None;
+            m_ResultPanel.ShowResult(DataManager.CurrStageData.Name, elapsedTime, false);
         }
 
 #if UNITY_EDITOR
