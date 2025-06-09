@@ -27,8 +27,16 @@ namespace MSE.Core
     public class StageClearData
     {
         public string unityUserId;
-        public string stageName;
-        public long clearTime;
+        public string stageId;
+        public bool cleared;
+    }
+
+    [Serializable]
+    public class StageClearRecordData
+    {
+        public string unityUserId;
+        public string stageId;
+        public long clearTimeMillis;
     }
 
     public partial class API
@@ -66,17 +74,17 @@ namespace MSE.Core
             }
         }
 
-        public static async Task SaveStageClearData(string userId, string stageName, long clearTime)
+        public static async Task SaveStageClearData(string userId, string stageName)
         {
             StageClearData stageClearData = new StageClearData();
             stageClearData.unityUserId = userId;
-            stageClearData.stageName = stageName;
-            stageClearData.clearTime = clearTime;
+            stageClearData.stageId = stageName;
+            stageClearData.cleared = true;
             string clearDataJson = JsonUtility.ToJson(stageClearData);
 
             try
             {
-                UnityWebRequest webRequest = UnityWebRequest.Post($"{BASE_URL}/api/users/stage-clear", clearDataJson, "application/json");
+                UnityWebRequest webRequest = UnityWebRequest.Post($"{BASE_URL}/api/stage-clear/save", clearDataJson, "application/json");
                 await webRequest.SendWebRequest();
 
                 if (webRequest.error != null)
@@ -85,6 +93,29 @@ namespace MSE.Core
                 }
             }
             catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static async Task SaveStageClearRecordData(string userId, string stageName, long clearTime)
+        {
+            StageClearRecordData stageClearRecordData = new StageClearRecordData();
+            stageClearRecordData.unityUserId = userId;
+            stageClearRecordData.stageId = stageName;
+            stageClearRecordData.clearTimeMillis = clearTime;
+            string clearRecordJson = JsonUtility.ToJson(stageClearRecordData);
+
+            try
+            {
+                UnityWebRequest webRequest = UnityWebRequest.Post($"{BASE_URL}/api/stage-records/submit", clearRecordJson, "application/json");
+                await webRequest.SendWebRequest();
+
+                if (webRequest.error != null)
+                {
+                    throw new Exception(webRequest.error);
+                }
+            } catch (Exception ex)
             {
                 throw ex;
             }

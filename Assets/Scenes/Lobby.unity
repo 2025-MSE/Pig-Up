@@ -872,9 +872,41 @@ PrefabInstance:
       propertyPath: m_LobbyGroup
       value: 
       objectReference: {fileID: 8893420496708962895}
+    - target: {fileID: 3402225383891192219, guid: 5be3c1a83e3ef74498bfdbbd2264d0de, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3402225383891192219, guid: 5be3c1a83e3ef74498bfdbbd2264d0de, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5102346239579512899, guid: 5be3c1a83e3ef74498bfdbbd2264d0de, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6724227606746212651, guid: 5be3c1a83e3ef74498bfdbbd2264d0de, type: 3}
       propertyPath: m_Name
       value: UIStageEnterPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278571334856890125, guid: 5be3c1a83e3ef74498bfdbbd2264d0de, type: 3}
+      propertyPath: m_HorizontalScrollbar
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546429946973006420, guid: 5be3c1a83e3ef74498bfdbbd2264d0de, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546429946973006420, guid: 5be3c1a83e3ef74498bfdbbd2264d0de, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546429946973006420, guid: 5be3c1a83e3ef74498bfdbbd2264d0de, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546429946973006420, guid: 5be3c1a83e3ef74498bfdbbd2264d0de, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
