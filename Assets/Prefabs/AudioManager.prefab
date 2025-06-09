@@ -57,6 +57,7 @@ MonoBehaviour:
   rankPopupSFX: {fileID: 8300000, guid: a274966b66935864d9fbac2698f43fe8, type: 3}
   clickSFX: {fileID: 8300000, guid: 71af08786b8a1c44ba9f067e7c474d82, type: 3}
   jumpSFX: {fileID: 8300000, guid: 1db9aa8f8c9e4424fb3f72050998baa5, type: 3}
+  failSFX: {fileID: 8300000, guid: e48c7a9511e83584798275ea5dbea5ad, type: 3}
 --- !u!82 &6160887640587600115
 AudioSource:
   m_ObjectHideFlags: 0

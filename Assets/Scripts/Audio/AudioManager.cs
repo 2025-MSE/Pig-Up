@@ -19,6 +19,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip rankPopupSFX;
     public AudioClip clickSFX;
     public AudioClip jumpSFX;
+    public AudioClip failSFX;
 
     public float BGMVolume => bgmSource.volume;
     public float SFXVolume => sfxSource.volume;

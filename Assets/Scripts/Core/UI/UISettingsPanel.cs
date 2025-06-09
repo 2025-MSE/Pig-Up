@@ -39,16 +39,21 @@ namespace MSE.Core
         public void OnGraphicsToggleChanged(int level)
         {
             QualitySettings.SetQualityLevel(level);
+            PlayerPrefs.SetInt("quality", level);
         }
 
         public void OnBGMVolumeSliderChanged()
         {
-            AudioManager.Instance.SetVolume(AudioType.BGM, m_BGMVolumeSlider.value);
+            float volume = m_BGMVolumeSlider.value;
+            AudioManager.Instance.SetVolume(AudioType.BGM, volume);
+            PlayerPrefs.SetFloat("bgm", volume);
         }
 
         public void OnSFXVolumeSliderChanged()
         {
-            AudioManager.Instance.SetVolume(AudioType.SFX, m_SFXVolumeSlider.value);
+            float volume = m_SFXVolumeSlider.value;
+            AudioManager.Instance.SetVolume(AudioType.SFX, volume);
+            PlayerPrefs.SetFloat("sfx", volume);
         }
 
         public void OnCloseButtonPressed()
