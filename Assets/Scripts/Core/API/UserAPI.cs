@@ -1,8 +1,9 @@
-using NUnit.Framework.Constraints;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -12,7 +13,7 @@ namespace MSE.Core
     public class User
     {
         public string unityUserId;
-        public UserStageClearData[] stageClearInfos;
+        public string playername;
     }
 
     [Serializable]
@@ -28,15 +29,20 @@ namespace MSE.Core
     {
         public string unityUserId;
         public string stageId;
-        public bool cleared;
+        public string playername;
+        public long clearTime;
+        public string clearDateTime;
     }
 
-    [Serializable]
-    public class StageClearRecordData
+    [SerializeField]
+    public class StageClearResultData
     {
+        public long id;
         public string unityUserId;
         public string stageId;
-        public long clearTimeMillis;
+        public string playername;
+        public long clearTime;
+        public string clearDateTime;
     }
 
     public partial class API
@@ -47,10 +53,11 @@ namespace MSE.Core
         private readonly static string BASE_URL = "https://example.url.com"; // Need to modify when we publish this application.
 #endif
 
-        public static async Task<User> UpdateUserIdAsync(string id)
+        public static async Task<User> UpdateUserIdAsync(string id, string playerName)
         {
             User user = new User();
             user.unityUserId = id;
+            user.playername = playerName;
             string userJson = JsonUtility.ToJson(user);
 
             try
@@ -74,12 +81,13 @@ namespace MSE.Core
             }
         }
 
-        public static async Task SaveStageClearData(string userId, string stageName)
+        public static async Task SaveStageClearData(string userId, string stageName, string playerName, long clearTime)
         {
             StageClearData stageClearData = new StageClearData();
             stageClearData.unityUserId = userId;
             stageClearData.stageId = stageName;
-            stageClearData.cleared = true;
+            stageClearData.playername = playerName;
+            stageClearData.clearTime = clearTime;
             string clearDataJson = JsonUtility.ToJson(stageClearData);
 
             try
@@ -98,23 +106,46 @@ namespace MSE.Core
             }
         }
 
-        public static async Task SaveStageClearRecordData(string userId, string stageName, long clearTime)
+        public static async Task<List<StageClearResultData>> GetStageRanking(string stageName)
         {
-            StageClearRecordData stageClearRecordData = new StageClearRecordData();
-            stageClearRecordData.unityUserId = userId;
-            stageClearRecordData.stageId = stageName;
-            stageClearRecordData.clearTimeMillis = clearTime;
-            string clearRecordJson = JsonUtility.ToJson(stageClearRecordData);
-
             try
             {
-                UnityWebRequest webRequest = UnityWebRequest.Post($"{BASE_URL}/api/stage-records/submit", clearRecordJson, "application/json");
+                UnityWebRequest webRequest = UnityWebRequest.Get($"{BASE_URL}/api/stage-clear/ranking/{stageName}");
                 await webRequest.SendWebRequest();
 
                 if (webRequest.error != null)
                 {
                     throw new Exception(webRequest.error);
                 }
+
+                string resJson = webRequest.downloadHandler.text;
+                Debug.Log(resJson);
+                List<StageClearResultData> ranking = JsonConvert.DeserializeObject<List<StageClearResultData>>(resJson);
+
+                return ranking;
+
+            } catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static async Task<bool> IsStageClearedAsync(string stageName)
+        {
+            try
+            {
+                UnityWebRequest webRequest = UnityWebRequest.Get($"{BASE_URL}/api/stage-clear/cleared/{AuthenticationService.Instance.PlayerId}/{stageName}");
+                await webRequest.SendWebRequest();
+
+                if (webRequest.error != null)
+                {
+                    throw new Exception(webRequest.error);
+                }
+
+                string resJson = webRequest.downloadHandler.text;
+                bool cleared = bool.Parse(resJson);
+
+                return cleared;
             } catch (Exception ex)
             {
                 throw ex;

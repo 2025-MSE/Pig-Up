@@ -214,7 +214,7 @@ namespace MSE.Core
 
             try
             {
-                API.SaveStageClearData(AuthenticationService.Instance.PlayerId, DataManager.CurrStageData.Name, (long)elapsedTime);
+                API.SaveStageClearData(AuthenticationService.Instance.PlayerId, DataManager.CurrStageData.Name, AuthenticationService.Instance.PlayerName, (long)elapsedTime);
                 Debug.Log("Successfully saved stage clear data!");
             }
             catch (Exception ex)

@@ -16,21 +16,20 @@ namespace MSE.Core
 
         private void Awake()
         {
-            m_StageButtons = m_ButtonRoot.GetComponentsInChildren<UIStoryStageButton>();
+            m_StageButtons = m_ButtonRoot.GetComponentsInChildren<UIStoryStageButton>(true);
         }
 
         private async void OnEnable()
         {
-            User userData = await API.UpdateUserIdAsync(AuthenticationService.Instance.PlayerId);
-            
             foreach (UIStoryStageButton sbutton in m_StageButtons)
             {
-                bool activated = Array.Find(userData.stageClearInfos ?? Array.Empty<UserStageClearData>(), (data) => data.stageName.Equals(sbutton.RequiredStage)) != null;
                 if (sbutton.RequiredStage.IsNullOrEmpty())
                 {
-                    activated = true;
+                    sbutton.Button.interactable = true;
+                    continue;
                 }
 
+                bool activated = await API.IsStageClearedAsync(sbutton.RequiredStage);
                 sbutton.Button.interactable = activated;
             }
         }
