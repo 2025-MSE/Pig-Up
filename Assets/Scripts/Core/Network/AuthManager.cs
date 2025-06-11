@@ -23,7 +23,7 @@ namespace MSE.Core
             {
                 await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
                 await AuthenticationService.Instance.UpdatePlayerNameAsync(playername);
-                await API.UpdateUserIdAsync(AuthenticationService.Instance.PlayerId);
+                await API.UpdateUserIdAsync(AuthenticationService.Instance.PlayerId, playername);
             }
             catch (Exception ex)
             {
@@ -39,7 +39,7 @@ namespace MSE.Core
             {
                 await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
                 await AuthenticationService.Instance.GetPlayerNameAsync();
-                await API.UpdateUserIdAsync(AuthenticationService.Instance.PlayerId);
+                await API.UpdateUserIdAsync(AuthenticationService.Instance.PlayerId, AuthenticationService.Instance.PlayerName);
             }
             catch (Exception ex)
             {
