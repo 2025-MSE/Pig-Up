@@ -27,6 +27,14 @@ namespace MSE.Core
 
         private void Start()
         {
+            float bgmVolume = PlayerPrefs.GetFloat("bgm", 0.3f);
+            float sfxVolume = PlayerPrefs.GetFloat("sfx", 0.5f);
+            int qLevel = PlayerPrefs.GetInt("quality", 0);
+
+            AudioManager.Instance.SetVolume(AudioType.BGM, bgmVolume);
+            AudioManager.Instance.SetVolume(AudioType.SFX, sfxVolume);
+            QualitySettings.SetQualityLevel(qLevel);
+
             StartCoroutine(RunProcess());
         }
 

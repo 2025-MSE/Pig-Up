@@ -21,7 +21,14 @@ public class UIStageResult : MonoBehaviour
 
     public void ShowResult(string stageName, float clearTime, bool isClear)
     {
-        AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.rankPopupSFX);
+        if (isClear)
+        {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.rankPopupSFX);
+        }
+        else
+        {
+            AudioManager.Instance.PlayAudio(AudioType.SFX, AudioManager.Instance.failSFX);
+        }
 
         gameObject.SetActive(true);
 

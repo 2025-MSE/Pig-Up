@@ -10,7 +10,14 @@ namespace MSE.Core
         public string RequiredStage => m_RequiredStage;
 
         private Button m_Button;
-        public Button Button => m_Button;
+        public Button Button
+        {
+            get
+            {
+                m_Button ??= GetComponent<Button>();
+                return m_Button;
+            }
+        }
 
         private void Awake()
         {
