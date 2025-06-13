@@ -214,26 +214,6 @@ public class Weather_Controller : MonoBehaviour
 	}
 
 
-    /// -------------------------------------------------------------------------------------- add by DongHun
-    public int GetWeatherTypeCode(string description)
-    {
-        description = description.ToLower();
-
-        if (description.Contains("clear"))
-            return (int)Weather_Controller.WeatherType.SUN;
-        if (description.Contains("cloud"))
-            return (int)Weather_Controller.WeatherType.CLOUDY;
-        if (description.Contains("rain"))
-            return (int)Weather_Controller.WeatherType.RAIN;
-        if (description.Contains("thunderstorm") || description.Contains("thunder"))
-            return (int)Weather_Controller.WeatherType.THUNDERSTORM;
-        if (description.Contains("snow"))
-            return (int)Weather_Controller.WeatherType.SNOW;
-        else
-            return (int)Weather_Controller.WeatherType.RANDOM; // Default to random if no match found
-    }
-
-    /// --------------------------------------------------------------------------------------
     private void PickRandomWeather()
     {
         int Weather;
