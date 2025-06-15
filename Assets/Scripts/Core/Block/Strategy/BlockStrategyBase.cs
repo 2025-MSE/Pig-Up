@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: The abstract strategy class.
+/// </summary>
+
 namespace MSE.Core
 {
     public abstract class BlockStrategyBase

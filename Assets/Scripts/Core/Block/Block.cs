@@ -1,4 +1,8 @@
-using System;
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: The block component. It is attached in the block prefab.
+/// </summary>
+
 using Unity.Netcode;
 using UnityEngine;
 

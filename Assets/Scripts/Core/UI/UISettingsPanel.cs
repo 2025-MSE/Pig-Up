@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Settings Panel (UI Panel). Can control bgm/sfx volume.
+/// </summary>
+
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,5 +1,9 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Login Group (UI Panel)
+/// </summary>
+
 using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

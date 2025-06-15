@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Chaewon Lee
+/// Description: It renders current elapsed time of the game.
+/// </summary>
+
 using TMPro;
 using UnityEngine;
 

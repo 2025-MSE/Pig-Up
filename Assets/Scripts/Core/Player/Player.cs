@@ -1,6 +1,7 @@
-/**
- * Owner: Dongjin Kuk
- */
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages the player's component and defines some simple network callback.
+/// </summary>
 
 using Unity.Collections;
 using Unity.Netcode;

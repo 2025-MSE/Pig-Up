@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Chaewon Lee
+/// Description: Manages audio system. (Singleton)
+/// </summary>
+
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour

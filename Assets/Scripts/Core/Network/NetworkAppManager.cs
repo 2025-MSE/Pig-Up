@@ -1,6 +1,10 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages app's state. We will use this class to implement host migration later.
+/// </summary>
+
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace MSE.Core
 {

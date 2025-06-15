@@ -1,6 +1,7 @@
-/**
- * Owner: Dongjin Kuk
- */
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages lobbies using UnityServices.
+/// </summary>
 
 using System;
 using System.Collections;
@@ -10,7 +11,6 @@ using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

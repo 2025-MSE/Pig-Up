@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Donghun Lee
+/// Description: This class manages weather system. It checks the city's weather and changes the game's weather.
+/// </summary>
+
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;

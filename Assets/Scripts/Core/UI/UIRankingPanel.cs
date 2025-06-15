@@ -1,8 +1,11 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages ranking panel. Automatically refresh itself(after 30 seconds).
+/// </summary>
+
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Unity.Services.Authentication;
 using UnityEngine;
 
 namespace MSE.Core

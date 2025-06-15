@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages the give up panel.
+/// </summary>
+
 using System;
 using UnityEngine;
 

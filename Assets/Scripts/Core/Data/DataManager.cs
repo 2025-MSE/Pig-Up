@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This manages the data of the game. It also contains the current stage data.
+/// </summary>
+
 using System.Collections.Generic;
 using UnityEngine;
 

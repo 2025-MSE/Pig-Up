@@ -1,8 +1,8 @@
-/**
- * Owner: Dongjin Kuk
- */
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: It defines the intro process.
+/// </summary>
 
-using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Unity.Services.Core;

@@ -1,4 +1,7 @@
-using UnityEngine;
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: The strategy when the block is in building(spawned by the building).
+/// </summary>
 
 namespace MSE.Core
 {

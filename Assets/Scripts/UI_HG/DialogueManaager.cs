@@ -1,8 +1,12 @@
+/// <summary>
+/// Author: Hyeongyenog Lee
+/// Description: It defines the dialgoue system. (Only for a pig and a wolf)
+/// </summary>
+
 using MSE.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;

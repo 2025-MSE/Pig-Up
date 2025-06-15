@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: We control the block's transparency by this component.
+/// </summary>
+
 using System.Collections.Generic;
 using UnityEngine;
 

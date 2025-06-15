@@ -1,7 +1,11 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages authentication system using UnityServices.
+/// </summary>
+
 using System;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
-using UnityEngine;
 
 namespace MSE.Core
 {

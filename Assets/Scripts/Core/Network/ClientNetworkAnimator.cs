@@ -1,5 +1,9 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: By overriding the NetworkAnimator, we can synchronize client's animator without adding another sync system.
+/// </summary>
+
 using Unity.Netcode.Components;
-using UnityEngine;
 
 public class ClientNetworkAnimator : NetworkAnimator
 {

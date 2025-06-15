@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Room Group (UI Panel). When player enters, it refreshes slots.
+/// </summary>
+
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;

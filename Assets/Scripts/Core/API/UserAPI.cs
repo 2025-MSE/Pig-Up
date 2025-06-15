@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Using these static methods, we can connect to the Java Spring RestAPI.
+/// </summary>
+
 using Newtonsoft.Json;
 using System;
 using System.Collections;

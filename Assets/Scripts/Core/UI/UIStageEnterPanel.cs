@@ -1,6 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Stage Enter Panel (UI Panel)
+/// </summary>
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

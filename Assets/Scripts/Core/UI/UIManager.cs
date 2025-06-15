@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages global UI. We can add some global UIs and append to this script.
+/// </summary>
+
 using UnityEngine;
 
 namespace MSE.Core

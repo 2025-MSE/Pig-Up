@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Simple player slot UI
+/// </summary>
+
 using TMPro;
 using UnityEngine;
 

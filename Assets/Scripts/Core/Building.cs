@@ -1,4 +1,8 @@
-using System;
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This script defines the building in the game. When the building has spawned, the GameController will assign the blocks of the building.
+/// </summary>
+
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;

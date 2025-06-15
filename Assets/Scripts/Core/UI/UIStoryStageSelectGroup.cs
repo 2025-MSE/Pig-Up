@@ -1,5 +1,8 @@
-using System;
-using Unity.Services.Authentication;
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Story Stage Select Group (UI Panel). It checks the player's stage clear status and enable/disable the stage button.
+/// </summary>
+
 using UnityEngine;
 using WebSocketSharp;
 

@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Chaewon Lee
+/// Description: It manages the progress bar which shows the building progress.
+/// </summary>
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;

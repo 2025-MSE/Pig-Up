@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: The detection is used when the block is placed. By collision, we check the block's placement.
+/// </summary>
+
 using System.Collections.Generic;
 using UnityEngine;
 

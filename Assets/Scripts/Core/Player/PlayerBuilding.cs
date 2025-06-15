@@ -1,7 +1,11 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages the player's building control.
+/// </summary>
+
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 
 namespace MSE.Core
 {

@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: The strategy when the block is in field(selectable block).
+/// </summary>
+
 namespace MSE.Core
 {
     public class BlockInFieldStrategy : BlockStrategyBase

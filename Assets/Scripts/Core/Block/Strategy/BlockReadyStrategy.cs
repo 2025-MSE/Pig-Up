@@ -1,4 +1,7 @@
-using UnityEngine;
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: The strategy when the block is ready to build(on player's hand).
+/// </summary>
 
 namespace MSE.Core
 {
