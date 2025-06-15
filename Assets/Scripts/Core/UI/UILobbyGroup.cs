@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Lobby Group (UI Panel)
+/// </summary>
+
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 

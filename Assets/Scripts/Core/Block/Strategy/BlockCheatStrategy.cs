@@ -1,5 +1,7 @@
-using MSE.Core;
-using UnityEngine;
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: The strategy when the block is checked by the cheat.
+/// </summary>
 
 namespace MSE.Core
 {

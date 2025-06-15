@@ -1,9 +1,13 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class use relay service to start server and join the server.
+/// </summary>
+
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
-using UnityEngine;
 
 namespace MSE.Core
 {

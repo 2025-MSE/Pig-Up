@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages player's name tag in the game.
+/// </summary>
+
 using TMPro;
 using UnityEngine;
 

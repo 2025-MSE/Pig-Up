@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: The strategy when the block is checked(it's placement is correct).
+/// </summary>
+
 namespace MSE.Core
 {
     public class BlockCheckedStrategy : BlockStrategyBase

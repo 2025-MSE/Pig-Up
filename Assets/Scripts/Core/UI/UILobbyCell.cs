@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages lobby button(which will be instantiated in lobby list).
+/// </summary>
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

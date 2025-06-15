@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This script is attached in the game map. This contains the building spawnpoint and selectable blocks spawnpoint.
+/// </summary>
+
 using UnityEngine;
 
 namespace MSE.Core

@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This ScriptableObject defines the data structure of each stage.
+/// </summary>
+
 using MSE.Core;
 using UnityEngine;
 

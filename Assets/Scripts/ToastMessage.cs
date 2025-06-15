@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Chaewon Lee
+/// Description: It defines the toast message (like Android system). It is needed to show simple alert to the player.
+/// </summary>
+
 using UnityEngine;
 using TMPro;
 using System.Collections;

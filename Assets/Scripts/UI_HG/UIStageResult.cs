@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Hyeongyenog Lee
+/// Description: Stage Result (UI Panel). It shows the result of the game.
+/// </summary>
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;

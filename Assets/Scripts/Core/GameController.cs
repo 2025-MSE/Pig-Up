@@ -1,10 +1,14 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This script defines game logic. It manages the whole game system by some several methods.
+/// </summary>
+
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Unity.Netcode;
 using Unity.Services.Authentication;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace MSE.Core
 {

@@ -1,8 +1,10 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Sign Up Group (UI Panel)
+/// </summary>
+
 using System;
-using System.Collections;
-using System.Threading.Tasks;
 using TMPro;
-using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;

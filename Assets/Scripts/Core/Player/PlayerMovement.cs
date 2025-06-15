@@ -1,10 +1,9 @@
-/**
- * Owner: Dongjin Kuk
- */
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: This class manages Player's movement.
+/// </summary>
 
 using Unity.Netcode;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

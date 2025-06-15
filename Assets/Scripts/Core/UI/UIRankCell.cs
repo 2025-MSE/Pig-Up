@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Rank Info (Simple UI)
+/// </summary>
+
 using TMPro;
 using UnityEngine;
 

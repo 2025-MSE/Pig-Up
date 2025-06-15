@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: The strategy when the block is built by the player.
+/// </summary>
+
 namespace MSE.Core
 {
     public class BlockBuiltByPlayerStrategy : BlockStrategyBase

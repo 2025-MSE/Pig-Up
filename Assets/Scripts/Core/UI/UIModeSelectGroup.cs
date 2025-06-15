@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Mode Select Group (UI Panel)
+/// </summary>
+
 using UnityEngine;
 
 namespace MSE.Core

@@ -1,3 +1,8 @@
+/// <summary>
+/// Author: Dongjin Kuk
+/// Description: Story Stage Button. It has requiredStage variable, and will be enable/disabled by checking it's clear status.
+/// </summary>
+
 using UnityEngine;
 using UnityEngine.UI;
 
